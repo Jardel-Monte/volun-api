@@ -1,6 +1,3 @@
-Claro! Aqui está o `README.md` com a seção dos Endpoints atualizada, incluindo todos os endpoints disponíveis na sua API:
-
-```markdown
 # Volun API
 
 Esta é a API para o projeto de voluntariado **Volun**, desenvolvida em Node.js e utilizando Firebase Firestore como banco de dados.
