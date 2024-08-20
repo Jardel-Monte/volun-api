@@ -7,7 +7,6 @@ Esta é a API para o projeto de voluntariado **Volun**, desenvolvida em Node.js 
 - **Node.js** - Plataforma de desenvolvimento backend.
 - **Express.js** - Framework para construção da API.
 - **Firebase Admin SDK** - Integração com o Firebase Firestore para manipulação de dados.
-- **Google Cloud Platform (GCP)** - Hospedagem e deploy da API.
 
 ## Estrutura do Projeto
 
