@@ -27,17 +27,17 @@ volun-api/
 │   └── logsModeracaoController.js
 │
 ├── routes/
-│   ├── usuarios.js
-│   ├── advertencias.js
-│   ├── login.js
-│   ├── organizacao.js
-│   ├── eventos.js
-│   ├── endereco.js
-│   ├── eventoHistorico.js
-│   ├── comentarios.js
-│   ├── denuncias.js
-│   ├── acoesModeracao.js
-│   └── logsModeracao.js
+│   ├── usuariosRoutes.js
+│   ├── advertenciasRoutes.js
+│   ├── loginRoutes.js
+│   ├── organizacaoRoutes.js
+│   ├── eventosRoutes.js
+│   ├── enderecoRoutes.js
+│   ├── eventoHistoricoRoutes.js
+│   ├── comentariosRoutes.js
+│   ├── denunciasRoutes.js
+│   ├── acoesModeracaoRoutes.js
+│   └── logsModeracaoRoutes.js
 │
 ├── config/
 │   └── firebase-config.js
