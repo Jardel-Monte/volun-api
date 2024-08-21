@@ -1,16 +1,11 @@
 console.log("Iniciando o servidor...");
 
-const express = require('express');
-const app = express();
-const usuariosRoute = require('./routes/usuarios');
+const app = require('./App');
 
-app.use(express.json());
+// Porta do servidor
+const PORT = process.env.PORT || 3000;
 
-// Rotas
-app.use('/usuarios', usuariosRoute);
-
-// Configuração do servidor
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
+

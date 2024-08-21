@@ -1,3 +1,6 @@
+Claro! Aqui está o `README.md` com a seção dos Endpoints atualizada, incluindo todos os endpoints disponíveis na sua API:
+
+```markdown
 # Volun API
 
 Esta é a API para o projeto de voluntariado **Volun**, desenvolvida em Node.js e utilizando Firebase Firestore como banco de dados.
@@ -7,6 +10,7 @@ Esta é a API para o projeto de voluntariado **Volun**, desenvolvida em Node.js 
 - **Node.js** - Plataforma de desenvolvimento backend.
 - **Express.js** - Framework para construção da API.
 - **Firebase Admin SDK** - Integração com o Firebase Firestore para manipulação de dados.
+- **Google Cloud Platform (GCP)** - Hospedagem e deploy da API.
 
 ## Estrutura do Projeto
 
@@ -27,17 +31,17 @@ volun-api/
 │   └── logsModeracaoController.js
 │
 ├── routes/
-│   ├── usuariosRoutes.js
-│   ├── advertenciasRoutes.js
-│   ├── loginRoutes.js
-│   ├── organizacaoRoutes.js
-│   ├── eventosRoutes.js
-│   ├── enderecoRoutes.js
-│   ├── eventoHistoricoRoutes.js
-│   ├── comentariosRoutes.js
-│   ├── denunciasRoutes.js
-│   ├── acoesModeracaoRoutes.js
-│   └── logsModeracaoRoutes.js
+│   ├── usuarios.js
+│   ├── advertencias.js
+│   ├── login.js
+│   ├── organizacao.js
+│   ├── eventos.js
+│   ├── endereco.js
+│   ├── eventoHistorico.js
+│   ├── comentarios.js
+│   ├── denuncias.js
+│   ├── acoesModeracao.js
+│   └── logsModeracao.js
 │
 ├── config/
 │   └── firebase-config.js
