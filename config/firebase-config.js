@@ -3,7 +3,7 @@ const serviceAccount = require('../serviceAccountKey.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  ignoreUndefinedProperties: true
+//  ignoreUndefinedProperties: true //
 });
 
 const db = admin.firestore();
