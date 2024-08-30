@@ -14,7 +14,6 @@ Esta é a API para o projeto de voluntariado **Volun**, desenvolvida em Node.js 
 
 ```
 volun-api/
-│
 ├── controllers/
 │   ├── usuariosController.js
 │   ├── advertenciasController.js
@@ -27,7 +26,6 @@ volun-api/
 │   ├── denunciasController.js
 │   ├── acoesModeracaoController.js
 │   └── logsModeracaoController.js
-│
 ├── routes/
 │   ├── usuarios.js
 │   ├── advertencias.js
@@ -40,15 +38,14 @@ volun-api/
 │   ├── denuncias.js
 │   ├── acoesModeracao.js
 │   └── logsModeracao.js
-│
 ├── config/
 │   └── firebase-config.js
-│
 ├── App.js
 ├── index.js
 ├── package.json
 ├── .gitignore
 └── README.md
+
 ```
 
 ## Configuração e Instalação
