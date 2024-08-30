@@ -1,5 +1,3 @@
-Claro! Aqui está o `README.md` com a seção dos Endpoints atualizada, incluindo todos os endpoints disponíveis na sua API:
-
 ```markdown
 # Volun API
 
@@ -10,7 +8,7 @@ Esta é a API para o projeto de voluntariado **Volun**, desenvolvida em Node.js 
 - **Node.js** - Plataforma de desenvolvimento backend.
 - **Express.js** - Framework para construção da API.
 - **Firebase Admin SDK** - Integração com o Firebase Firestore para manipulação de dados.
-- **Google Cloud Platform (GCP)** - Hospedagem e deploy da API.
+- **Vercel** - Hospedagem e deploy da API.
 
 ## Estrutura do Projeto
 
@@ -46,7 +44,7 @@ volun-api/
 ├── config/
 │   └── firebase-config.js
 │
-├── app.js
+├── App.js
 ├── index.js
 ├── package.json
 ├── .gitignore
@@ -57,7 +55,7 @@ volun-api/
 
 1. **Clone o Repositório**
    ```bash
-   git clone https://github.com/seu-usuario/volun-api.git
+   git clone https://github.com/jardel-monte/volun-api.git
    cd volun-api
    ```
 
@@ -68,8 +66,8 @@ volun-api/
 
 3. **Configuração do Firebase**
    - Baixe o arquivo `serviceAccountKey.json` do Firebase Console.
-   - Coloque-o no diretório `config/`.
-   - **Importante:** Não inclua este arquivo no controle de versão. Adicione-o ao arquivo `.gitignore`.
+   - Coloque-o no diretório `config/` e faça a importação do mesmo no arquivo `firebase-config.js`.
+   - **Importante:** Faça isso apenas para testar a API localmente. Não inclua este arquivo no controle de versão. Adicione-o ao arquivo `.gitignore`.
 
 4. **Variáveis de Ambiente**
    - Crie um arquivo `.env` na raiz do projeto para armazenar as credenciais e outras variáveis de ambiente necessárias.
@@ -159,7 +157,12 @@ volun-api/
 
 ## Deploy
 
-Esta API ainda não foi hospedada.
+Esta API está atualmente hospedada no Vercel.
+
+Para fazer deploy:
+   ```bash
+   vercel
+   ```
 
 ## Contribuições
 
