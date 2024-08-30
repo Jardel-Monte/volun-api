@@ -12,7 +12,6 @@ Esta é a API para o projeto de voluntariado **Volun**, desenvolvida em Node.js 
 
 ## Estrutura do Projeto
 
-```
 volun-api/
 ├── controllers/
 │   ├── usuariosController.js
@@ -45,7 +44,6 @@ volun-api/
 ├── package.json
 ├── .gitignore
 └── README.md
-
 ```
 
 ## Configuração e Instalação
