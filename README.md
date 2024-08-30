@@ -51,7 +51,7 @@ volun-api/
 
 1. **Clone o Repositório**
    ```bash
-   git clone https://github.com/jardel-monte/volun-api.git
+   git clone https://github.com/Jardel-Monte/volun-api.git
    cd volun-api
    ```
 
