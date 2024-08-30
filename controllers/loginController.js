@@ -1,6 +1,14 @@
-// loginController.js
 const db = require('../config/firebase-config');
 const { v4: uuidv4 } = require('uuid');
+const bcrypt = require('bcrypt');
+const Joi = require('joi');
+
+const loginSchema = Joi.object({
+  usuario_id: Joi.string().required(),
+  senha: Joi.string().min(6).required(),  // Senhas devem ter pelo menos 6 caracteres
+  email: Joi.string().email().required(),
+  provedor: Joi.string().valid('google', 'facebook', 'email').required()
+});
 
 const loginController = {
   // Cria um novo login
@@ -8,14 +16,17 @@ const loginController = {
     try {
       const { usuario_id, senha, email, provedor } = req.body;
 
-      if (!usuario_id || !senha || !email || !provedor) {
-        return res.status(400).send('Todos os campos são obrigatórios.');
-      }
+      // Validação dos dados
+      const { error } = loginSchema.validate({ usuario_id, senha, email, provedor });
+      if (error) return res.status(400).send(`Erro de validação: ${error.details[0].message}`);
+
+      // Hash da senha
+      const hashedPassword = await bcrypt.hash(senha, 10);
 
       const newLogin = {
         id: uuidv4(),
         usuario_id,
-        senha,
+        senha: hashedPassword,
         email,
         provedor,
         datetime: new Date().toISOString()
@@ -33,11 +44,7 @@ const loginController = {
   getLogins: async (req, res) => {
     try {
       const loginsSnapshot = await db.collection('login').get();
-      const logins = [];
-
-      loginsSnapshot.forEach((doc) => {
-        logins.push({ id: doc.id, ...doc.data() });
-      });
+      const logins = loginsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
       res.status(200).json(logins);
     } catch (error) {
@@ -75,13 +82,19 @@ const loginController = {
         return res.status(404).send('Login não encontrado');
       }
 
-      await db.collection('login').doc(loginId).update({
-        senha: senha || loginDoc.data().senha,
+      // Atualizar dados
+      const updates = {
         email: email || loginDoc.data().email,
         provedor: provedor || loginDoc.data().provedor,
-        datetime: new Date().toISOString(),
-      });
+        datetime: new Date().toISOString()
+      };
 
+      if (senha) {
+        // Hash da nova senha
+        updates.senha = await bcrypt.hash(senha, 10);
+      }
+
+      await db.collection('login').doc(loginId).update(updates);
       res.status(200).send('Login atualizado com sucesso');
     } catch (error) {
       console.error('Erro ao atualizar login:', error);
