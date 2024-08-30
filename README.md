@@ -43,8 +43,8 @@ volun-api/
 ├── index.js
 ├── package.json
 ├── .gitignore
-├── README.md
-└── vercel.json
+├── vercel.json
+└── README.md
 ```
 
 ## Configuração e Instalação
