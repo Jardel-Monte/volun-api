@@ -3,7 +3,7 @@ const algoliasearch = require('algoliasearch');
 
 // Inicializa o cliente Algolia
 const client = algoliasearch('JUIX37JGYV', 'fef86dcef0788abd2239d85843e8565c');
-const index = client.initIndex('dev_EVENTO');
+const index = client.initIndex('eventos');
 
 // Função auxiliar para validação dos dados do evento
 const validateEventoData = (data) => {
