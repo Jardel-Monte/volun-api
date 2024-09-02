@@ -8,19 +8,26 @@ const validateEnderecoData = (data) => {
   return null;
 };
 
-// Cria um novo endereço
+// Cria novos endereços
 exports.createEndereco = async (req, res) => {
   try {
-    const data = req.body;
+    const enderecos = Array.isArray(req.body) ? req.body : [req.body];
+    
+    const batch = db.batch();
 
-    // Validação dos dados
-    const validationError = validateEnderecoData(data);
-    if (validationError) {
-      return res.status(400).send(validationError);
-    }
+    enderecos.forEach((data) => {
+      // Validação dos dados
+      const validationError = validateEnderecoData(data);
+      if (validationError) {
+        throw new Error(validationError);
+      }
 
-    await db.collection('endereco').add(data);
-    res.status(201).send('Endereço criado com sucesso!');
+      const docRef = db.collection('endereco').doc(); // Cria um novo documento com ID automático
+      batch.set(docRef, data);
+    });
+
+    await batch.commit();
+    res.status(201).send(`${enderecos.length} endereços criados com sucesso!`);
   } catch (error) {
     console.error('Erro ao criar endereço:', error);
     res.status(500).send(`Erro ao criar endereço: ${error.message}`);

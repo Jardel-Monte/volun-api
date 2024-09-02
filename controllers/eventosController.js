@@ -1,4 +1,9 @@
 const db = require('../config/firebase-config');
+const algoliasearch = require('algoliasearch');
+
+// Inicializa o cliente Algolia
+const client = algoliasearch('JUIX37JGYV', 'fef86dcef0788abd2239d85843e8565c');
+const index = client.initIndex('dev_EVENTO');
 
 // Função auxiliar para validação dos dados do evento
 const validateEventoData = (data) => {
@@ -8,7 +13,7 @@ const validateEventoData = (data) => {
   return null;
 };
 
-// Cria um novo evento
+// Cria um novo evento e o indexa no Algolia
 exports.createEvento = async (req, res) => {
   try {
     const data = req.body;
@@ -19,7 +24,12 @@ exports.createEvento = async (req, res) => {
       return res.status(400).send(validationError);
     }
 
-    await db.collection('eventos').add(data);
+    const docRef = await db.collection('eventos').add(data);
+    const evento = { id: docRef.id, ...data };
+
+    // Indexa o evento no Algolia
+    await index.saveObject(evento, { autoGenerateObjectIDIfNotExist: true });
+
     res.status(201).send('Evento criado com sucesso!');
   } catch (error) {
     console.error('Erro ao criar evento:', error);
@@ -27,22 +37,28 @@ exports.createEvento = async (req, res) => {
   }
 };
 
-// Retorna todos os eventos com paginação
-exports.getEventos = async (req, res) => {
+// Retorna eventos por título com busca avançada no Algolia
+exports.getEventosByTitulo = async (req, res) => {
   try {
-    const pageSize = parseInt(req.query.pageSize) || 10;
-    const page = parseInt(req.query.page) || 1;
+    const titulo = req.query.titulo;
+    if (!titulo) {
+      return res.status(400).send('O parâmetro "titulo" é obrigatório');
+    }
 
-    const snapshot = await db.collection('eventos')
-      .offset((page - 1) * pageSize)
-      .limit(pageSize)
-      .get();
+    // Busca no Algolia
+    const { hits } = await index.search(titulo, {
+      attributesToRetrieve: ['id', 'titulo', 'descricao'],
+      hitsPerPage: 10,
+    });
 
-    const eventos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    res.status(200).json(eventos);
+    if (hits.length === 0) {
+      return res.status(404).send('Nenhum evento encontrado com esse título');
+    }
+
+    res.status(200).json(hits);
   } catch (error) {
-    console.error('Erro ao buscar eventos:', error);
-    res.status(500).send(`Erro ao buscar eventos: ${error.message}`);
+    console.error('Erro ao buscar eventos por título:', error);
+    res.status(500).send(`Erro ao buscar eventos por título: ${error.message}`);
   }
 };
 
