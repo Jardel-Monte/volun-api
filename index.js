@@ -1,5 +1,3 @@
-console.log("Iniciando o servidor...");
-
 const app = require('./App');
 
 // Porta do servidor
