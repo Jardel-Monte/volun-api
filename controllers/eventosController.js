@@ -37,6 +37,22 @@ exports.createEvento = async (req, res) => {
   }
 };
 
+// Retorna todos os eventos
+exports.getEventos = async (req, res) => {
+  try {
+    const snapshot = await db.collection('eventos').get();
+    if (snapshot.empty) {
+      return res.status(404).send('Nenhum evento encontrado');
+    }
+
+    const eventos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    res.status(200).json(eventos);
+  } catch (error) {
+    console.error('Erro ao buscar eventos:', error);
+    res.status(500).send(`Erro ao buscar eventos: ${error.message}`);
+  }
+};
+
 // Retorna eventos por título com busca avançada no Algolia
 exports.getEventosByTitulo = async (req, res) => {
   try {
