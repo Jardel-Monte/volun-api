@@ -1,4 +1,4 @@
-const { db } = require('../config/firebase-config');
+const db = require('../config/firebase-config');
 const algoliasearch = require('algoliasearch');
 
 // Inicializa o cliente Algolia
@@ -9,6 +9,9 @@ const index = client.initIndex('eventos');
 const validateEventoData = (data) => {
   if (!data.titulo || !data.descricao || !data.data_hora_inicio) {
     return 'Campos obrigatórios não preenchidos: título, descrição, data/hora de início.';
+  }
+  if (!Array.isArray(data.tags)) {
+    return 'O campo "tags" deve ser um array de strings.';
   }
   return null;
 };
@@ -113,6 +116,11 @@ exports.updateEvento = async (req, res) => {
     }
 
     await db.collection('eventos').doc(id).update(data);
+
+    // Atualiza o evento no Algolia
+    const evento = { id, ...data };
+    await index.saveObject(evento);
+
     res.status(200).send('Evento atualizado com sucesso!');
   } catch (error) {
     console.error('Erro ao atualizar evento:', error);
@@ -131,6 +139,10 @@ exports.deleteEvento = async (req, res) => {
     }
 
     await db.collection('eventos').doc(id).delete();
+
+    // Remove o evento do Algolia
+    await index.deleteObject(id);
+
     res.status(200).send('Evento deletado com sucesso!');
   } catch (error) {
     console.error('Erro ao deletar evento:', error);
