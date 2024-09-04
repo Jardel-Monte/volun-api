@@ -2,8 +2,8 @@ const { db } = require('../config/firebase-config');
 
 // Função auxiliar para validação dos dados do usuário
 const validateUsuarioData = (data) => {
-  if (!data.nome || !data.sobrenome || !data.email || !data.cpf) {
-    return 'Campos obrigatórios não preenchidos: nome, sobrenome, email, CPF.';
+  if (!data.nome || !data.sobrenome || !data.cpf) {
+    return 'Campos obrigatórios não preenchidos: nome, sobrenome, CPF.';
   }
   if (data.cpf && !/^\d{11}$/.test(data.cpf)) {
     return 'CPF inválido. Deve conter 11 dígitos numéricos.';
