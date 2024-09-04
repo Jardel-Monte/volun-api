@@ -18,6 +18,8 @@ if (!admin.apps.length) {
     ignoreUndefinedProperties: true
   });
 }
-const db = admin.firestore();
 
-module.exports = db;
+const db = admin.firestore();  // Firestore
+const auth = admin.auth();     // Authentication
+
+module.exports = { db, auth };
