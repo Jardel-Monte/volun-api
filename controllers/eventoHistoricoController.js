@@ -1,4 +1,4 @@
-const db = require('../config/firebase-config');
+const { db } = require('../config/firebase-config');
 
 // Função auxiliar para validar a existência de um histórico de evento
 const validateEventoHistoricoExistence = async (id) => {
