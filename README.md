@@ -1,14 +1,14 @@
 ```markdown
 # Volun API
 
-Esta é a API para o projeto de voluntariado **Volun**, desenvolvida em Node.js e utilizando Firebase Firestore como banco de dados.
+Esta é a API para o projeto de voluntariado Volun, desenvolvida em Node.js e utilizando Firebase Firestore como banco de dados.
 
 ## Tecnologias Utilizadas
 
-- **Node.js** - Plataforma de desenvolvimento backend.
-- **Express.js** - Framework para construção da API.
-- **Firebase Admin SDK** - Integração com o Firebase Firestore para manipulação de dados.
-- **Vercel** - Hospedagem e deploy da API.
+- Node.js - Plataforma de desenvolvimento backend.
+- Express.js - Framework para construção da API.
+- Firebase Admin SDK - Integração com o Firebase Firestore para manipulação de dados.
+- Vercel - Hospedagem e deploy da API.
 
 ## Estrutura do Projeto
 
