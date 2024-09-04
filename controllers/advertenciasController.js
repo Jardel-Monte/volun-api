@@ -1,4 +1,4 @@
-const db = require('../config/firebase-config');
+const { db } = require('../config/firebase-config');
 
 // Função auxiliar para validação dos dados da advertência
 const validateAdvertenciaData = (data) => {

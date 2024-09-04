@@ -1,4 +1,4 @@
-const db = require('../config/firebase-config');
+const { db }= require('../config/firebase-config');
 
 // Função auxiliar para validar a existência de um log de moderação
 const validateLogModeracaoExistence = async (id) => {

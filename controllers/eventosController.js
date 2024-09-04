@@ -1,4 +1,4 @@
-const db = require('../config/firebase-config');
+const { db } = require('../config/firebase-config');
 const algoliasearch = require('algoliasearch');
 
 // Inicializa o cliente Algolia

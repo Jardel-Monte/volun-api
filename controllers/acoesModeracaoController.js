@@ -1,4 +1,4 @@
-const db = require('../config/firebase-config');
+const { db } = require('../config/firebase-config');
 
 // Função auxiliar para validar a existência de uma ação de moderação
 const validateAcaoModeracaoExistence = async (id) => {
