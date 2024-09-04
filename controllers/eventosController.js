@@ -21,6 +21,9 @@ exports.createEvento = async (req, res) => {
   try {
     const data = req.body;
 
+    // Log dos dados recebidos
+    console.log('Dados recebidos:', data);
+
     // Validação dos dados
     const validationError = validateEventoData(data);
     if (validationError) {
