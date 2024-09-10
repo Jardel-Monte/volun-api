@@ -1,18 +1,20 @@
 ```markdown
 # Volun API
 
-Esta é a API para o projeto de voluntariado Volun, desenvolvida em Node.js e utilizando Firebase Firestore como banco de dados.
+Esta é a API para o projeto de voluntariado **Volun**, desenvolvida em Node.js e utilizando Firebase Firestore como banco de dados.
 
 ## Tecnologias Utilizadas
 
-- Node.js - Plataforma de desenvolvimento backend.
-- Express.js - Framework para construção da API.
-- Firebase Admin SDK - Integração com o Firebase Firestore para manipulação de dados.
-- Vercel - Hospedagem e deploy da API.
+- **Node.js** - Plataforma de desenvolvimento backend.
+- **Express.js** - Framework para construção da API.
+- **Firebase Admin SDK** - Integração com o Firebase Firestore para manipulação de dados.
+- **Vercel** - Hospedagem e deploy da API.
 
 ## Estrutura do Projeto
 
+```
 volun-api/
+│
 ├── controllers/
 │   ├── usuariosController.js
 │   ├── advertenciasController.js
@@ -25,6 +27,7 @@ volun-api/
 │   ├── denunciasController.js
 │   ├── acoesModeracaoController.js
 │   └── logsModeracaoController.js
+│
 ├── routes/
 │   ├── usuarios.js
 │   ├── advertencias.js
@@ -37,13 +40,14 @@ volun-api/
 │   ├── denuncias.js
 │   ├── acoesModeracao.js
 │   └── logsModeracao.js
+│
 ├── config/
 │   └── firebase-config.js
+│
 ├── App.js
 ├── index.js
 ├── package.json
 ├── .gitignore
-├── vercel.json
 └── README.md
 ```
 
@@ -51,7 +55,7 @@ volun-api/
 
 1. **Clone o Repositório**
    ```bash
-   git clone https://github.com/Jardel-Monte/volun-api.git
+   git clone https://github.com/seu-usuario/volun-api.git
    cd volun-api
    ```
 
@@ -153,12 +157,7 @@ volun-api/
 
 ## Deploy
 
-Esta API está atualmente hospedada no Vercel.
-
-Para fazer deploy:
-   ```bash
-   vercel
-   ```
+Esta API ainda não foi hospedada.
 
 ## Contribuições
 

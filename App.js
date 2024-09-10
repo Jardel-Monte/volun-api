@@ -1,20 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');
 
 const app = express();
 
 // Middleware para parsing do body em JSON
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-/* app.use(cors({
-  origin: 'http://volun-senai.vercel.app', // Substitua com o URL do seu frontend
-  methods: 'GET,POST,PUT,DELETE', // Defina os métodos permitidos
-  credentials: true, // Permite o envio de cookies de autenticação (se necessário)
-})); */
-
-app.use(cors()); // Permite requisições de qualquer origem
 
 // Importa as rotas
 const usuariosRoutes = require('./routes/usuariosRoutes');

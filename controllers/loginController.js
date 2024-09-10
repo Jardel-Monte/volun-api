@@ -1,6 +1,6 @@
 const { auth } = require('../config/firebase-config'); // Importando auth
 
-// Cria um novo usuário no Firebase Authentication (Etapa 1)
+// Cria um novo usuário
 exports.createUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -20,7 +20,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
-// Retorna dados do Firebase Authentication pelo UID
+// Retorna dados de um usuário pelo UID
 exports.getUserByUID = async (req, res) => {
   try {
     const uid = req.params.uid;
@@ -38,13 +38,17 @@ exports.getUserByUID = async (req, res) => {
   }
 };
 
-// Atualiza dados do Firebase Authentication
+// Atualiza dados de um usuário
 exports.updateUser = async (req, res) => {
   try {
     const uid = req.params.uid;
     const { email, password } = req.body;
 
-    const userRecord = await auth.updateUser(uid, { email, password });
+    // Atualiza os dados do usuário no Firebase Authentication
+    const userRecord = await auth.updateUser(uid, {
+      email,
+      password,
+    });
 
     res.status(200).json({
       uid: userRecord.uid,
@@ -55,12 +59,10 @@ exports.updateUser = async (req, res) => {
   }
 };
 
-// Deleta um usuário no Firebase Authentication
+// Deleta um usuário
 exports.deleteUser = async (req, res) => {
   try {
     const uid = req.params.uid;
-
-    // Deleta o usuário no Firebase Authentication
     await auth.deleteUser(uid);
 
     res.status(200).send('Usuário deletado com sucesso!');
