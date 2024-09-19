@@ -4,10 +4,10 @@ const { db } = require('../config/firebase-config');
 exports.addUsuarioInfo = async (req, res) => {
   try {
     const { uid } = req.params;
-    const { nome, sobrenome, cpf, data_nascimento, ddd, telefone, foto_perfil } = req.body;
+    const { nome, sobrenome, cpf, data_nascimento, ddd, telefone } = req.body;
 
     // // Verifica se todos os campos obrigatórios estão presentes
-    // if (!nome || !sobrenome || !cpf || !data_nascimento || !ddd || !telefone || !foto_perfil) {
+    // if (!nome || !sobrenome || !cpf || !data_nascimento || !ddd || !telefone) {
     //   return res.status(400).send('Todos os campos obrigatórios devem ser preenchidos.');
     // }
 
@@ -17,8 +17,7 @@ exports.addUsuarioInfo = async (req, res) => {
       cpf,
       data_nascimento,
       ddd,
-      telefone,
-      foto_perfil
+      telefone
     };
 
     // Adiciona os dados à collection 'usuarios' com o UID como ID do documento
@@ -29,7 +28,6 @@ exports.addUsuarioInfo = async (req, res) => {
     res.status(500).send(`Erro ao adicionar informações do usuário: ${error.message}`);
   }
 };
-
 
 // Retorna todos os usuários da coleção 'usuarios'
 exports.getUsuarios = async (req, res) => {
