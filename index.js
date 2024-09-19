@@ -1,5 +1,3 @@
-console.log("Iniciando o servidor...");
-
 const app = require('./App');
 
 // Porta do servidor
@@ -9,3 +7,4 @@ app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
 
+module.exports = app;
