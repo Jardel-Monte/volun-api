@@ -23,9 +23,9 @@ exports.addUsuarioInfo = async (req, res) => {
     // Adiciona os dados à collection 'usuarios' com o UID como ID do documento
     await db.collection('usuarios').doc(uid).set(userData);
 
-    res.status(201).send('Informações do usuário adicionadas com sucesso!');
+    res.status(201).json({ message: 'Informações do usuário adicionadas com sucesso!' });
   } catch (error) {
-    res.status(500).send(`Erro ao adicionar informações do usuário: ${error.message}`);
+    res.status(500).json({ error: `Erro ao adicionar informações do usuário: ${error.message}` });
   }
 };
 
