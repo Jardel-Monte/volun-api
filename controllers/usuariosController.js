@@ -6,18 +6,14 @@ exports.addUsuarioInfo = async (req, res) => {
     const { uid } = req.params;
     const { nome, sobrenome, cpf, data_nascimento, ddd, telefone } = req.body;
 
-    // // Verifica se todos os campos obrigatórios estão presentes
-    // if (!nome || !sobrenome || !cpf || !data_nascimento || !ddd || !telefone) {
-    //   return res.status(400).send('Todos os campos obrigatórios devem ser preenchidos.');
-    // }
-
     const userData = {
       nome,
       sobrenome,
       cpf,
       data_nascimento,
       ddd,
-      telefone
+      telefone,
+      endereco_id: null
     };
 
     // Adiciona os dados à collection 'usuarios' com o UID como ID do documento
