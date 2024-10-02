@@ -2,8 +2,8 @@ const { db } = require('../config/firebase-config');
 
 // Função auxiliar para validação dos dados do endereço
 const validateEnderecoData = (data) => {
-  if (!data.logradouro || !data.bairro || !data.cep || !data.cidade || !data.estado) {
-    return 'Campos obrigatórios não preenchidos: logradouro, bairro, CEP, cidade, estado.';
+  if (!data.logradouro || !data.bairro || !data.cep || !data.cidade || !data.estado || !data.numero) {
+    return 'Campos obrigatórios não preenchidos: logradouro, bairro, CEP, cidade, estado, número.';
   }
   return null;
 };
