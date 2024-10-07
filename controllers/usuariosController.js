@@ -13,7 +13,6 @@ exports.addUsuarioInfo = async (req, res) => {
       data_nascimento,
       ddd,
       telefone,
-      endereco_id: "0"
     };
 
     // Adiciona os dados à collection 'usuarios' com o UID como ID do documento
