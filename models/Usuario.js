@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const usuarioSchema = new mongoose.Schema({
-  _id: { type: String, required: true }, // O '_id' será o 'uid' do Firebase
   nome: { type: String, required: true },
   sobrenome: { type: String, required: true },
   cpf: { type: String, required: true, unique: true },

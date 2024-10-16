@@ -15,7 +15,7 @@ app.use(cors()); // Permite requisições de qualquer origem
 const usuariosRoutes = require('./routes/usuariosRoutes');
 // const advertenciasRoutes = require('./routes/advertenciasRoutes');
 const organizacaoRoutes = require('./routes/organizacaoRoutes');
-// const eventosRoutes = require('./routes/eventosRoutes');
+const eventosRoutes = require('./routes/eventosRoutes');
 const enderecoRoutes = require('./routes/enderecoRoutes');
 // const eventoHistoricoRoutes = require('./routes/eventoHistoricoRoutes');
 const comentariosRoutes = require('./routes/comentariosRoutes');
@@ -26,7 +26,7 @@ const acoesModeracaoRoutes = require('./routes/acoesModeracaoRoutes');
 app.use('/usuarios', usuariosRoutes);
 // app.use('/advertencias', advertenciasRoutes);
 app.use('/organizacao', organizacaoRoutes);
-// app.use('/eventos', eventosRoutes);
+app.use('/eventos', eventosRoutes);
 app.use('/endereco', enderecoRoutes);
 // app.use('/evento-historico', eventoHistoricoRoutes);
 app.use('/comentarios', comentariosRoutes);
