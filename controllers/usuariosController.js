@@ -1,110 +1,73 @@
-const { db } = require('../config/firebase-config');
+const Usuario = require('../models/Usuario');
 
-// Função auxiliar para validação dos dados do usuário
-const validateUsuarioData = (data) => {
-  if (!data.nome || !data.sobrenome || !data.cpf) {
-    return 'Campos obrigatórios não preenchidos: nome, sobrenome, CPF.';
-  }
-  if (data.cpf && !/^\d{11}$/.test(data.cpf)) {
-    return 'CPF inválido. Deve conter 11 dígitos numéricos.';
-  }
-  return null;
-};
-
-// Cria um novo usuário
-exports.createUsuario = async (req, res) => {
+// Adiciona informações adicionais de um usuário usando o 'uid' como ID
+exports.addUsuarioInfo = async (req, res) => {
   try {
-    const data = req.body;
+    const { uid } = req.params; // O 'uid' é recebido como parte da URL
+    const { nome, sobrenome, cpf, data_nascimento, ddd, telefone } = req.body;
 
-    // Validação dos dados
-    const validationError = validateUsuarioData(data);
-    if (validationError) {
-      return res.status(400).send(validationError);
-    }
+    const userData = new Usuario({
+      _id: uid, 
+      nome,
+      sobrenome,
+      cpf,
+      data_nascimento,
+      ddd,
+      telefone,
+    });
 
-    await db.collection('usuarios').add(data);
-    res.status(201).send('Usuário criado com sucesso!');
+    // Salva os dados no MongoDB
+    await userData.save();
+
+    res.status(201).json({ message: 'Informações do usuário adicionadas com sucesso!' });
   } catch (error) {
-    console.error('Erro ao criar usuário:', error);
-    res.status(500).send(`Erro ao criar usuário: ${error.message}`);
+    res.status(500).json({ error: `Erro ao adicionar informações do usuário: ${error.message}` });
   }
 };
 
-// Retorna todos os usuários com paginação
+// Retorna todos os usuários da coleção 'usuarios'
 exports.getUsuarios = async (req, res) => {
   try {
-    const pageSize = parseInt(req.query.pageSize) || 10;
-    const page = parseInt(req.query.page) || 1;
-
-    const snapshot = await db.collection('usuarios')
-      .offset((page - 1) * pageSize)
-      .limit(pageSize)
-      .get();
-
-    const usuarios = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const usuarios = await Usuario.find(); // Busca todos os documentos
     res.status(200).json(usuarios);
   } catch (error) {
-    console.error('Erro ao buscar usuários:', error);
     res.status(500).send(`Erro ao buscar usuários: ${error.message}`);
   }
 };
 
-// Retorna um usuário específico
+// Retorna um usuário específico da coleção 'usuarios'
 exports.getUsuarioById = async (req, res) => {
   try {
-    const id = req.params.id;
-    const doc = await db.collection('usuarios').doc(id).get();
-
-    if (!doc.exists) {
+    const id = req.params.id; // O ID é passado como parâmetro
+    const usuario = await Usuario.findById(id); // Usa o método findById para buscar o documento
+    if (!usuario) {
       return res.status(404).send('Usuário não encontrado');
     }
-
-    res.status(200).json({ id: doc.id, ...doc.data() });
+    res.status(200).json(usuario);
   } catch (error) {
-    console.error('Erro ao buscar usuário:', error);
     res.status(500).send(`Erro ao buscar usuário: ${error.message}`);
   }
 };
 
-// Atualiza um usuário
+// Atualiza informações do usuário na coleção 'usuarios'
 exports.updateUsuario = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.params.id; // O ID é passado como parâmetro
     const data = req.body;
-
-    // Validação dos dados
-    const validationError = validateUsuarioData(data);
-    if (validationError) {
-      return res.status(400).send(validationError);
-    }
-
-    const doc = await db.collection('usuarios').doc(id).get();
-    if (!doc.exists) {
-      return res.status(404).send('Usuário não encontrado');
-    }
-
-    await db.collection('usuarios').doc(id).update(data);
+    await Usuario.findByIdAndUpdate(id, data); // Atualiza o documento com base no ID
     res.status(200).send('Usuário atualizado com sucesso!');
   } catch (error) {
-    console.error('Erro ao atualizar usuário:', error);
     res.status(500).send(`Erro ao atualizar usuário: ${error.message}`);
   }
 };
 
-// Deleta um usuário
+// Deleta um usuário na coleção 'usuarios'
 exports.deleteUsuario = async (req, res) => {
   try {
-    const id = req.params.id;
-
-    const doc = await db.collection('usuarios').doc(id).get();
-    if (!doc.exists) {
-      return res.status(404).send('Usuário não encontrado');
-    }
-
-    await db.collection('usuarios').doc(id).delete();
+    const id = req.params.id; // O ID é passado como parâmetro
+    await Usuario.findByIdAndDelete(id); // Deleta o documento com base no ID
     res.status(200).send('Usuário deletado com sucesso!');
   } catch (error) {
-    console.error('Erro ao deletar usuário:', error);
     res.status(500).send(`Erro ao deletar usuário: ${error.message}`);
   }
 };
