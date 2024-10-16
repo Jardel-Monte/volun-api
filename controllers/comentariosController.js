@@ -1,4 +1,4 @@
-const Comentario = require('../models/comentario');
+const Comentario = require('../models/Comentario');
 
 // Cria um novo comentário
 exports.createComentario = async (req, res) => {
