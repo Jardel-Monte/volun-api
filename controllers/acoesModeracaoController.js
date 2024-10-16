@@ -1,4 +1,4 @@
-const AcoesModeracao = require('../models/acoesModeracao');
+const AcoesModeracao = require('../models/AcoesModeracao');
 
 // Cria uma nova ação de moderação
 exports.createAcaoModeracao = async (req, res) => {
