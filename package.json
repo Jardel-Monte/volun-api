@@ -10,9 +10,10 @@
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "express": "^4.19.2",
+    "express": "^4.21.1",
     "firebase": "^10.13.1",
     "firebase-admin": "^12.3.1",
-    "joi": "^17.13.3"
+    "joi": "^17.13.3",
+    "moongose": "^1.0.0"
   }
 }
