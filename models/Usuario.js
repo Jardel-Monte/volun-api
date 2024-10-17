@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const usuarioSchema = new mongoose.Schema({
+  _id: { type: String, required: true },
   nome: { type: String, required: true },
   sobrenome: { type: String, required: true },
   cpf: { type: String, required: true, unique: true },
