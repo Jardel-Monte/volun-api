@@ -1,13 +1,19 @@
 const Usuario = require('../models/Usuario');
 
-// Adiciona informações adicionais de um usuário usando o 'uid' como ID
 exports.addUsuarioInfo = async (req, res) => {
   try {
     const { uid } = req.params; // O 'uid' é recebido como parte da URL
     const { nome, sobrenome, cpf, data_nascimento, ddd, telefone } = req.body;
 
+    // Verifica se o usuário já existe no MongoDB
+    const existingUser = await Usuario.findById(uid);
+    if (existingUser) {
+      return res.status(400).json({ message: 'Usuário já existe!' });
+    }
+
+    // Cria um novo usuário com o 'uid' como '_id'
     const userData = new Usuario({
-      _id: uid, 
+      _id: uid, // Definindo o 'uid' como o '_id'
       nome,
       sobrenome,
       cpf,
