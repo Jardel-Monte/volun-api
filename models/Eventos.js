@@ -8,7 +8,7 @@ const eventoSchema = new mongoose.Schema({
     data_fim: { type: Date, required: true },
     imagem: { type: String, required: true },
     vaga_limite: { type: Number, required: true },
-    ong_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Organizacao', required: true }
+    ong_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Organizacao', default: null }
   }, { timestamps: true });
 
   module.exports = mongoose.model('Eventos', eventoSchema);  
