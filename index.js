@@ -22,5 +22,3 @@ mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
 
 module.exports = app;
 
-// volunzinho 
-// S8EXiRDrAwejYDO0
