@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const comentariosController = require('../controllers/comentariosController');
+const denunciaController = require('../controllers/denunciasController');
 
-router.post('/', comentariosController.createComentario);
-router.get('/', comentariosController.getComentarios);
-router.get('/:id', comentariosController.getComentarioById);
-router.put('/:id', comentariosController.updateComentario);
-router.delete('/:id', comentariosController.deleteComentario);
+router.post('/', denunciaController.criarDenuncia);
+router.get('/', denunciaController.obterDenuncias);
+router.get('/:id', denunciaController.obterDenunciaPorId);
+router.delete('/:id', denunciaController.deletarDenuncia);
 
 module.exports = router;
+
 

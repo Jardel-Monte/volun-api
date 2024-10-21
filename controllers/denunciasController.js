@@ -1,93 +1,65 @@
-const { db } = require('../config/firebase-config');
+const Denuncia = require('../models/Denuncia');
 
-// Cria uma nova denúncia
-exports.createDenuncia = async (req, res) => {
+// Criar uma nova denúncia
+exports.criarDenuncia = async (req, res) => {
   try {
-    const data = req.body;
-    if (!data || typeof data !== 'object') {
-      return res.status(400).send('Dados inválidos para criar denúncia.');
-    }
-    await db.collection('denuncias').add(data);
-    res.status(201).send('Denúncia criada com sucesso!');
+    // Cria uma nova denúncia com os dados recebidos do body
+    const novaDenuncia = new Denuncia(req.body);
+
+    // Salva a denúncia no banco de dados
+    await novaDenuncia.save();
+
+    res.status(201).json({ message: 'Denúncia criada com sucesso!', denuncia: novaDenuncia });
   } catch (error) {
-    console.error('Erro ao criar denúncia:', error);
-    res.status(500).send(`Erro ao criar denúncia: ${error.message}`);
+    res.status(500).json({ message: 'Erro ao criar denúncia', error });
   }
 };
 
-// Retorna todas as denúncias com paginação
-exports.getDenuncias = async (req, res) => {
+// Obter todas as denúncias
+exports.obterDenuncias = async (req, res) => {
   try {
-    const pageSize = parseInt(req.query.pageSize) || 10;
-    const page = parseInt(req.query.page) || 1;
+    const denuncias = await Denuncia.find()
+      // Popula apenas campos que são ObjectId (comentario_id, evento_id, org_id)
+      .populate('comentario_id')
+      .populate('evento_id')
+      .populate('org_id');
 
-    const snapshot = await db.collection('denuncias')
-      .offset((page - 1) * pageSize)
-      .limit(pageSize)
-      .get();
-
-    const denuncias = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     res.status(200).json(denuncias);
   } catch (error) {
-    console.error('Erro ao buscar denúncias:', error);
-    res.status(500).send(`Erro ao buscar denúncias: ${error.message}`);
+    res.status(500).json({ message: 'Erro ao obter denúncias', error: error.message });
   }
 };
 
-// Retorna uma denúncia específica
-exports.getDenunciaById = async (req, res) => {
+// Obter uma denúncia específica pelo ID
+exports.obterDenunciaPorId = async (req, res) => {
   try {
-    const id = req.params.id;
-    const validationError = await validateDenunciaExistence(id);
-    if (validationError) {
-      return res.status(404).send(validationError);
+    const denuncia = await Denuncia.findById(req.params.id)
+      .populate('comentario_id')
+      .populate('evento_id')
+      .populate('org_id');
+    
+    if (!denuncia) {
+      return res.status(404).json({ message: 'Denúncia não encontrada' });
     }
 
-    const doc = await db.collection('denuncias').doc(id).get();
-    res.status(200).json({ id: doc.id, ...doc.data() });
+    res.status(200).json(denuncia);
   } catch (error) {
-    console.error('Erro ao buscar denúncia:', error);
-    res.status(500).send(`Erro ao buscar denúncia: ${error.message}`);
+    res.status(500).json({ message: 'Erro ao obter denúncia', error: error.message });
   }
 };
 
-// Atualiza uma denúncia
-exports.updateDenuncia = async (req, res) => {
+
+// Deletar uma denúncia pelo ID
+exports.deletarDenuncia = async (req, res) => {
   try {
-    const id = req.params.id;
-    const data = req.body;
-
-    const validationError = await validateDenunciaExistence(id);
-    if (validationError) {
-      return res.status(404).send(validationError);
+    const denuncia = await Denuncia.findByIdAndDelete(req.params.id);
+    
+    if (!denuncia) {
+      return res.status(404).json({ message: 'Denúncia não encontrada' });
     }
 
-    if (!data || typeof data !== 'object') {
-      return res.status(400).send('Dados inválidos para atualizar denúncia.');
-    }
-
-    await db.collection('denuncias').doc(id).update(data);
-    res.status(200).send('Denúncia atualizada com sucesso!');
+    res.status(200).json({ message: 'Denúncia deletada com sucesso' });
   } catch (error) {
-    console.error('Erro ao atualizar denúncia:', error);
-    res.status(500).send(`Erro ao atualizar denúncia: ${error.message}`);
-  }
-};
-
-// Deleta uma denúncia
-exports.deleteDenuncia = async (req, res) => {
-  try {
-    const id = req.params.id;
-
-    const validationError = await validateDenunciaExistence(id);
-    if (validationError) {
-      return res.status(404).send(validationError);
-    }
-
-    await db.collection('denuncias').doc(id).delete();
-    res.status(200).send('Denúncia deletada com sucesso!');
-  } catch (error) {
-    console.error('Erro ao deletar denúncia:', error);
-    res.status(500).send(`Erro ao deletar denúncia: ${error.message}`);
+    res.status(500).json({ message: 'Erro ao deletar denúncia', error });
   }
 };

@@ -19,7 +19,7 @@ const eventosRoutes = require('./routes/eventosRoutes');
 const enderecoRoutes = require('./routes/enderecoRoutes');
 // const eventoHistoricoRoutes = require('./routes/eventoHistoricoRoutes');
 const comentariosRoutes = require('./routes/comentariosRoutes');
-// const denunciasRoutes = require('./routes/denunciasRoutes');
+const denunciasRoutes = require('./routes/denunciasRoutes');
 const acoesModeracaoRoutes = require('./routes/acoesModeracaoRoutes');
 
 // Define as rotas da API
@@ -30,7 +30,7 @@ app.use('/eventos', eventosRoutes);
 app.use('/endereco', enderecoRoutes);
 // app.use('/evento-historico', eventoHistoricoRoutes);
 app.use('/comentarios', comentariosRoutes);
-// app.use('/denuncias', denunciasRoutes);
+app.use('/denuncias', denunciasRoutes);
 app.use('/acoes-moderacao', acoesModeracaoRoutes);
 
 

@@ -3,19 +3,7 @@ const Evento = require('../models/Eventos');
 // Cria um novo evento
 exports.createEvento = async (req, res) => {
   try {
-    const { titulo, descricao, tags, data_inicio, data_fim, imagem, vaga_limite, ong_id } = req.body;
-
-    const novoEvento = new Evento({
-      titulo,
-      descricao,
-      tags,
-      data_inicio,
-      data_fim,
-      imagem,
-      vaga_limite,
-      ong_id,
-    });
-
+    const novoEvento = new Evento(req.body);  // Simplesmente passa o req.body
     await novoEvento.save();
     res.status(201).send('Evento criado com sucesso!');
   } catch (error) {
@@ -38,13 +26,10 @@ exports.getEventos = async (req, res) => {
 // Retorna um evento específico por ID
 exports.getEventoById = async (req, res) => {
   try {
-    const id = req.params.id;
-    const evento = await Evento.findById(id).populate('ong_id');
-
+    const evento = await Evento.findById(req.params.id).populate('ong_id');
     if (!evento) {
       return res.status(404).send('Evento não encontrado');
     }
-
     res.status(200).json(evento);
   } catch (error) {
     console.error('Erro ao buscar evento:', error);
@@ -55,15 +40,10 @@ exports.getEventoById = async (req, res) => {
 // Atualiza um evento
 exports.updateEvento = async (req, res) => {
   try {
-    const id = req.params.id;
-    const data = req.body;
-
-    const evento = await Evento.findByIdAndUpdate(id, data, { new: true });
-
+    const evento = await Evento.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!evento) {
       return res.status(404).send('Evento não encontrado');
     }
-
     res.status(200).send('Evento atualizado com sucesso!');
   } catch (error) {
     console.error('Erro ao atualizar evento:', error);
@@ -74,13 +54,10 @@ exports.updateEvento = async (req, res) => {
 // Deleta um evento
 exports.deleteEvento = async (req, res) => {
   try {
-    const id = req.params.id;
-
-    const evento = await Evento.findByIdAndDelete(id);
+    const evento = await Evento.findByIdAndDelete(req.params.id);
     if (!evento) {
       return res.status(404).send('Evento não encontrado');
     }
-
     res.status(200).send('Evento deletado com sucesso!');
   } catch (error) {
     console.error('Erro ao deletar evento:', error);

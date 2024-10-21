@@ -8,7 +8,7 @@ const enderecoSchema = new mongoose.Schema({
   estado: { type: String, required: true },
   numero: { type: String, default: '' }, 
   usuario_id: { type: String, default: null }, 
-  org_id: { type: String, default: null },
+  org_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Organizacao', default: null },
   evento_id: { type: String, default: null }, 
 }, { timestamps: true }); 
 

@@ -1,10 +1,9 @@
 const express = require('express');
-const mongoose = require('mongoose');  // Pacote mongoose para lidar com o MongoDB
-const app = require('./App'); // Importando o app do seu projeto
+const mongoose = require('mongoose');  
+const app = require('./App');
 
 mongoose.set('strictQuery', false);
 
-// Porta do servidor
 const PORT = process.env.PORT || 3000;
 
 // Conectar ao MongoDB
