@@ -15,7 +15,8 @@ exports.createEvento = async (req, res) => {
 // Retorna todos os eventos
 exports.getEventos = async (req, res) => {
   try {
-    const eventos = await Evento.find().populate('ong_id');
+    const eventos = await Evento.find()
+      .populate('ong_id'); // Popula todos os campos de 'ong_id'
     res.status(200).json(eventos);
   } catch (error) {
     console.error('Erro ao buscar eventos:', error);
@@ -26,7 +27,8 @@ exports.getEventos = async (req, res) => {
 // Retorna um evento específico por ID
 exports.getEventoById = async (req, res) => {
   try {
-    const evento = await Evento.findById(req.params.id).populate('ong_id');
+    const evento = await Evento.findById(req.params.id)
+      .populate('ong_id'); // Popula todos os campos de 'ong_id'
     if (!evento) {
       return res.status(404).send('Evento não encontrado');
     }
