@@ -3,7 +3,7 @@ const Evento = require('../models/Eventos');
 // Cria um novo evento
 exports.createEvento = async (req, res) => {
   try {
-    const novoEvento = new Evento(req.body);  // Simplesmente passa o req.body
+    const novoEvento = new Evento(req.body); 
     await novoEvento.save();
     res.status(201).send('Evento criado com sucesso!');
   } catch (error) {
