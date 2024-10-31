@@ -4,7 +4,7 @@ const index = require('../services/algoliaConfig');
 // Cria um novo evento
 exports.createEvento = async (req, res) => {
   try {
-    const novoEvento = new Evento(req.body); 
+    const novoEvento = new Evento(req.body);
     await novoEvento.save();
 
     // Envia o novo evento para o Algolia
@@ -53,17 +53,14 @@ exports.updateEvento = async (req, res) => {
       return res.status(404).send('Evento não encontrado');
     }
 
-    // Adiciona log para verificar o ID e os dados do evento
-    console.log('ID do evento sendo atualizado:', req.params.id);
-    console.log('Dados do evento a serem enviados ao Algolia:', req.body);
+    // Log dos dados que serão enviados ao Algolia
+    console.log('Conteúdo de req.body:', req.body);
 
     // Atualiza o evento no Algolia
-    const algoliaResponse = await index.partialUpdateObject({
-      objectID: req.params.id,
+    await index.partialUpdateObject({
+      objectID: evento._id.toString(), // Garante que o ID do documento no MongoDB seja o objectID no Algolia
       ...req.body, // Atualiza os dados do evento no Algolia
     });
-
-    console.log('Resposta do Algolia:', algoliaResponse); // Log da resposta do Algolia
 
     res.status(200).send('Evento atualizado com sucesso!');
   } catch (error) {
@@ -81,7 +78,7 @@ exports.deleteEvento = async (req, res) => {
     }
 
     // Deleta o evento do Algolia
-    await index.deleteObject(req.params.id);
+    await index.deleteObject(evento._id.toString()); // Garante que o ID do documento no MongoDB seja o objectID no Algolia
 
     res.status(200).send('Evento deletado com sucesso!');
   } catch (error) {
