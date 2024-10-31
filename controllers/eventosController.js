@@ -23,8 +23,7 @@ exports.createEvento = async (req, res) => {
 // Retorna todos os eventos
 exports.getEventos = async (req, res) => {
   try {
-    const eventos = await Evento.find()
-      .populate('ong_id'); // Popula todos os campos de 'ong_id'
+    const eventos = await Evento.find().populate('ong_id'); // Popula todos os campos de 'ong_id'
     res.status(200).json(eventos);
   } catch (error) {
     console.error('Erro ao buscar eventos:', error);
@@ -35,8 +34,7 @@ exports.getEventos = async (req, res) => {
 // Retorna um evento específico por ID
 exports.getEventoById = async (req, res) => {
   try {
-    const evento = await Evento.findById(req.params.id)
-      .populate('ong_id'); // Popula todos os campos de 'ong_id'
+    const evento = await Evento.findById(req.params.id).populate('ong_id'); // Popula todos os campos de 'ong_id'
     if (!evento) {
       return res.status(404).send('Evento não encontrado');
     }
@@ -55,11 +53,17 @@ exports.updateEvento = async (req, res) => {
       return res.status(404).send('Evento não encontrado');
     }
 
+    // Adiciona log para verificar o ID e os dados do evento
+    console.log('ID do evento sendo atualizado:', req.params.id);
+    console.log('Dados do evento a serem enviados ao Algolia:', req.body);
+
     // Atualiza o evento no Algolia
-    await index.partialUpdateObject({
+    const algoliaResponse = await index.partialUpdateObject({
       objectID: req.params.id,
       ...req.body, // Atualiza os dados do evento no Algolia
     });
+
+    console.log('Resposta do Algolia:', algoliaResponse); // Log da resposta do Algolia
 
     res.status(200).send('Evento atualizado com sucesso!');
   } catch (error) {
