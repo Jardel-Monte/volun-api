@@ -1,5 +1,5 @@
 const Evento = require('../models/Eventos');
-const index = require('../services/algoliaConfig'); // Importa a configuração do Algolia
+const index = require('../services/algoliaConfig');
 
 // Cria um novo evento
 exports.createEvento = async (req, res) => {
