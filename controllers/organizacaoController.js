@@ -87,3 +87,19 @@ exports.deleteOrganizacao = async (req, res) => {
     res.status(500).send(`Erro ao deletar organização: ${error.message}`);
   }
 };
+
+// Retorna endereços associados a um usuario_id específico
+exports.getOrganizacaoByCriadorId = async (req, res) => {
+  try {
+    const criador_id = req.params.criador_id;
+    const organizacoes = await Organizacao.find({ criador_id });
+    if (!organizacoes.length) {
+      return res.status(404).send('Nenhuma organização foi encontrada para este usuario.');
+    }
+
+    res.status(200).json(organizacoes);
+  } catch (error) {
+    console.error('Erro ao buscar Organização pelo criador_id:', error);
+    res.status(500).send(`Erro ao buscar Organizaçôes: ${error.message}`);
+  }
+};
