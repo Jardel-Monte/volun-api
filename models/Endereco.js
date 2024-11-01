@@ -9,7 +9,7 @@ const enderecoSchema = new mongoose.Schema({
   numero: { type: String, default: '' }, 
   usuario_id: { type: String, default: null }, 
   org_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Organizacao', default: null },
-  evento_id: { type: String, default: null }, 
+  evento_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Eventos', default: null },
 }, { timestamps: true }); 
 
 module.exports = mongoose.model('Endereco', enderecoSchema);
