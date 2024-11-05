@@ -1,23 +1,18 @@
 const mongoose = require("mongoose");
-const algoliaClient = require("./algoliaConfig");
-const Endereco = require("../models/Endereco");
-const Evento = require("../models/Eventos");
-
-// Configura o índice do Algolia
-const index = algoliaClient.initIndex("eventos");
+const algoliaIndex = require("./algoliaConfig"); // Importa o índice diretamente
+const Endereco = require("./models/Endereco");
+const Evento = require("./models/Evento");
 
 async function sincronizarEventosComAlgolia() {
   try {
-    // Busca todos os eventos no MongoDB com o nome e detalhes da ONG já populados
-    const eventos = await Evento.find().populate('ong_id');
+    // Busca todos os eventos no MongoDB e popula o campo ong_id
+    const eventos = await Evento.find().populate("ong_id");
 
     // Mapeia eventos e combina com as informações de cidade e estado do endereço
     const eventosComCidadeEstado = await Promise.all(
       eventos.map(async (evento) => {
-        // Busca a cidade e o estado do endereço correspondente ao evento
         const endereco = await Endereco.findOne({ evento_id: evento._id });
 
-        // Cria um objeto com os dados do evento, incluindo todas as informações necessárias
         return {
           objectID: evento._id.toString(),
           titulo: evento.titulo,
@@ -49,8 +44,8 @@ async function sincronizarEventosComAlgolia() {
       })
     );
 
-    // Envia os dados completos para o índice do Algolia
-    await index.saveObjects(eventosComCidadeEstado);
+    // Envia os dados combinados para o índice do Algolia
+    await algoliaIndex.saveObjects(eventosComCidadeEstado);
     console.log("Eventos sincronizados com sucesso no Algolia!");
   } catch (error) {
     console.error("Erro ao sincronizar eventos com o Algolia:", error);
