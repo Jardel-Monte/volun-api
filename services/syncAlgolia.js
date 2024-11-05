@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const algoliaIndex = require("./algoliaConfig"); // Importa o índice diretamente
-const Endereco = require("./models/Endereco");
-const Evento = require("./models/Evento");
+const Endereco = require("../models/Endereco");
+const Evento = require("../models/Evento");
 
 async function sincronizarEventosComAlgolia() {
   try {
