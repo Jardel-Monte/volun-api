@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const algoliaClient = require("./algoliaConfig");
-const Endereco = require("./models/Endereco");
-const Evento = require("./models/Eventos");
+const Endereco = require("../models/Endereco");
+const Evento = require("../models/Eventos");
 
 // Configura o índice do Algolia
 const index = algoliaClient.initIndex("eventos");
