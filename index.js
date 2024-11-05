@@ -1,8 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');  
 const app = require('./App');
-const sincronizarEventosComAlgolia = require('./syncAlgolia'); // Corrija o caminho, se necessário
-
+const sincronizarEventosComAlgolia = require('./services/syncAlgolia');
 mongoose.set('strictQuery', false);
 
 const PORT = process.env.PORT || 3000;
