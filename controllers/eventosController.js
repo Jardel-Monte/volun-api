@@ -1,6 +1,4 @@
 const Evento = require('../models/Eventos');
-const Organizacao = require('../models/Organizacao');
-const Endereco = require('../models/Endereco');
 const index = require('../services/algoliaConfig');
 
 // Cria um novo evento
@@ -9,17 +7,10 @@ exports.createEvento = async (req, res) => {
     const novoEvento = new Evento(req.body);
     await novoEvento.save();
 
-    // Buscar nome da ONG, cidade e estado para o Algolia
-    const organizacao = await Organizacao.findById(novoEvento.ong_id);
-    const endereco = await Endereco.findOne({ evento_id: novoEvento._id });
-
     // Envia o novo evento para o Algolia
     await index.saveObject({
-      objectID: novoEvento._id.toString(), // ID do documento no MongoDB como objectID no Algolia
-      ...req.body, // Dados do evento
-      ongNome: organizacao ? organizacao.nome : null, // Nome da ONG
-      cidade: endereco ? endereco.cidade : null,      // Cidade do evento
-      estado: endereco ? endereco.estado : null       // Estado do evento
+      objectID: novoEvento._id.toString(), // Garante que o ID do documento no MongoDB seja o objectID no Algolia
+      ...req.body, // Adiciona os dados do evento
     });
 
     res.status(201).send('Evento criado com sucesso!');
@@ -62,17 +53,13 @@ exports.updateEvento = async (req, res) => {
       return res.status(404).send('Evento não encontrado');
     }
 
-    // Buscar nome da ONG, cidade e estado para o Algolia
-    const organizacao = await Organizacao.findById(evento.ong_id);
-    const endereco = await Endereco.findOne({ evento_id: evento._id });
+    // Log dos dados que serão enviados ao Algolia
+    console.log('Conteúdo de req.body:', req.body);
 
     // Atualiza o evento no Algolia
     await index.partialUpdateObject({
-      objectID: evento._id.toString(), // ID do documento no MongoDB como objectID no Algolia
-      ...req.body, // Dados atualizados do evento
-      ongNome: organizacao ? organizacao.nome : null, // Nome da ONG
-      cidade: endereco ? endereco.cidade : null,      // Cidade do evento
-      estado: endereco ? endereco.estado : null       // Estado do evento
+      objectID: evento._id.toString(), // Garante que o ID do documento no MongoDB seja o objectID no Algolia
+      ...req.body, // Atualiza os dados do evento no Algolia
     });
 
     res.status(200).send('Evento atualizado com sucesso!');
