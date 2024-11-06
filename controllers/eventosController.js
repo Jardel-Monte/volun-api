@@ -3,7 +3,7 @@ const Evento = require('../models/Eventos');
 const Organizacao = require('../models/Organizacao');
 const Endereco = require('../models/Endereco');
 const index = require('../services/algoliaConfig');
-const mapearEventoParaAlgolia = require('../models/algoliaMapper');
+const mapearEventoParaAlgolia = require('../models/AlgoliaMapper');
 
 // Cria um novo evento
 exports.createEvento = async (req, res) => {
