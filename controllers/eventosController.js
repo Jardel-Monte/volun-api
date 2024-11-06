@@ -1,7 +1,9 @@
+// eventosController.js
 const Evento = require('../models/Eventos');
 const Organizacao = require('../models/Organizacao');
 const Endereco = require('../models/Endereco');
 const index = require('../services/algoliaConfig');
+const mapearEventoParaAlgolia = require('../algoliaMapper');
 
 // Cria um novo evento
 exports.createEvento = async (req, res) => {
@@ -9,18 +11,11 @@ exports.createEvento = async (req, res) => {
     const novoEvento = new Evento(req.body);
     await novoEvento.save();
 
-    // Buscar nome da ONG, cidade e estado para o Algolia
-    const organizacao = await Organizacao.findById(novoEvento.ong_id);
-    const endereco = await Endereco.findOne({ evento_id: novoEvento._id });
+    // Mapeia o evento para o formato do Algolia
+    const eventoMapeado = await mapearEventoParaAlgolia(novoEvento);
 
     // Envia o novo evento para o Algolia
-    await index.saveObject({
-      objectID: novoEvento._id.toString(), // ID do documento no MongoDB como objectID no Algolia
-      ...req.body, // Dados do evento
-      ongNome: organizacao ? organizacao.nome : null, // Nome da ONG
-      cidade: endereco ? endereco.cidade : null,      // Cidade do evento
-      estado: endereco ? endereco.estado : null       // Estado do evento
-    });
+    await index.saveObject(eventoMapeado);
 
     res.status(201).send('Evento criado com sucesso!');
   } catch (error) {
@@ -62,18 +57,11 @@ exports.updateEvento = async (req, res) => {
       return res.status(404).send('Evento não encontrado');
     }
 
-    // Buscar nome da ONG, cidade e estado para o Algolia
-    const organizacao = await Organizacao.findById(evento.ong_id);
-    const endereco = await Endereco.findOne({ evento_id: evento._id });
+    // Mapeia o evento atualizado para o formato do Algolia
+    const eventoMapeado = await mapearEventoParaAlgolia(evento);
 
     // Atualiza o evento no Algolia
-    await index.partialUpdateObject({
-      objectID: evento._id.toString(), // ID do documento no MongoDB como objectID no Algolia
-      ...req.body, // Dados atualizados do evento
-      ongNome: organizacao ? organizacao.nome : null, // Nome da ONG
-      cidade: endereco ? endereco.cidade : null,      // Cidade do evento
-      estado: endereco ? endereco.estado : null       // Estado do evento
-    });
+    await index.partialUpdateObject(eventoMapeado);
 
     res.status(200).send('Evento atualizado com sucesso!');
   } catch (error) {
@@ -91,7 +79,7 @@ exports.deleteEvento = async (req, res) => {
     }
 
     // Deleta o evento do Algolia
-    await index.deleteObject(evento._id.toString()); // Garante que o ID do documento no MongoDB seja o objectID no Algolia
+    await index.deleteObject(evento._id.toString());
 
     res.status(200).send('Evento deletado com sucesso!');
   } catch (error) {
