@@ -1,10 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const swaggerUi = require('swagger-ui-express'); // Importa o Swagger UI
-const swaggerDocument = require('./swagger.json'); // O arquivo swagger.json
-const path = require('path');
-const fs = require('fs');
+// const swaggerUi = require('swagger-ui-express'); // Importa o Swagger UI
+// const swaggerDocument = require('./swagger.json'); // O arquivo swagger.json
+// const path = require('path');
+// const fs = require('fs');
 
 const app = express();
 
@@ -13,11 +13,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
-// Servindo o Swagger UI
-const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, 'swagger.json'), 'utf8'));
+// // Servindo o Swagger UI
+// const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, 'swagger.json'), 'utf8'));
 
-// Rota para a documentação do Swagger em `/api-docs`
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// // Rota para a documentação do Swagger em `/api-docs`
+// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Importa as rotas
 const usuariosRoutes = require('./routes/usuariosRoutes');
