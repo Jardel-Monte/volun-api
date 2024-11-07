@@ -6,6 +6,7 @@ const usuarioSchema = new mongoose.Schema({
   sobrenome: { type: String, required: true },
   cpf: { type: String, required: true, unique: true },
   data_nascimento: { type: Date, required: true },
+  photoUrl: {type: String, default: null},
   ddd: { type: String, required: true },
   telefone: { type: String, required: true },
   isModerator: { type: Boolean, default: false },
