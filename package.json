@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "swagger-autogen": "node swagger.js"
   },
   "dependencies": {
     "algoliasearch": "^4.10.5",
@@ -14,6 +15,9 @@
     "firebase": "^10.13.1",
     "firebase-admin": "^12.3.1",
     "joi": "^17.13.3",
-    "moongose": "^1.0.0"
+    "moongose": "^1.0.0",
+    "swagger-autogen": "^2.23.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   }
 }

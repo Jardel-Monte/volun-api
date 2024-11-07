@@ -1,0 +1,159 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Documentação da Volun-API",
+    "description": "API para gerenciar usuários, organizações, eventos e comentários, moderação e etc...",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "paths": {
+    "/usuarios": {
+      "get": {
+        "summary": "Lista todos os usuários",
+        "description": "Retorna uma lista com todos os usuários cadastrados.",
+        "responses": {
+          "200": {
+            "description": "Lista de usuários",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Usuario" }
+            }
+          }
+        }
+      }
+    },
+    "/usuarios/{id}": {
+      "get": {
+        "summary": "Obtém um usuário específico",
+        "description": "Retorna os dados de um usuário pelo seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do usuário"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário encontrado",
+            "schema": { "$ref": "#/definitions/Usuario" }
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualiza um usuário",
+        "description": "Atualiza os dados de um usuário existente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do usuário"
+          },
+          {
+            "in": "body",
+            "name": "usuario",
+            "description": "Dados do usuário a ser atualizado",
+            "schema": { "$ref": "#/definitions/Usuario" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário atualizado com sucesso"
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deleta um usuário",
+        "description": "Deleta um usuário pelo seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do usuário"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário deletado com sucesso"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        }
+      }
+    },
+    "/usuarios/{uid}/info": {
+      "post": {
+        "summary": "Adiciona informações adicionais para o usuário",
+        "description": "Adiciona informações extras para o usuário com base no UID.",
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "UID do usuário"
+          },
+          {
+            "in": "body",
+            "name": "info",
+            "description": "Informações adicionais do usuário",
+            "schema": { "$ref": "#/definitions/UsuarioInfo" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Informações do usuário adicionadas com sucesso"
+          },
+          "400": {
+            "description": "Dados inválidos"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Usuario": {
+      "type": "object",
+      "properties": {
+        "nome": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "idade": {
+          "type": "integer"
+        }
+      }
+    },
+    "UsuarioInfo": {
+      "type": "object",
+      "properties": {
+        "endereco": {
+          "type": "string"
+        },
+        "telefone": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
