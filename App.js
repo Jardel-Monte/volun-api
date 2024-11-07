@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 // Rota para a documentação do Swagger em `/api-docs`
-app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Importa as rotas
 const usuariosRoutes = require('./routes/usuariosRoutes');
