@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
 
@@ -11,8 +12,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
+// Servindo o Swagger UI
+const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, 'swagger.json'), 'utf8'));
+
 // Rota para a documentação do Swagger em `/api-docs`
-app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Importa as rotas
 const usuariosRoutes = require('./routes/usuariosRoutes');
@@ -31,6 +35,11 @@ app.use('/endereco', enderecoRoutes);
 app.use('/comentarios', comentariosRoutes);
 app.use('/denuncias', denunciasRoutes);
 app.use('/acoes-moderacao', acoesModeracaoRoutes);
+
+// Middleware para rota não encontrada (404)
+app.use((req, res, next) => {
+  res.status(404).json({ message: "Rota não encontrada" });
+});
 
 module.exports = app;
 
