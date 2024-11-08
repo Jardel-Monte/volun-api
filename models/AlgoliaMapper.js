@@ -1,8 +1,14 @@
-const Endereco = require("./Endereco");
+const Endereco = require('./Endereco');
+const Organizacao = require('./Organizacao');
 
 async function mapearEventoParaAlgolia(evento) {
   const endereco = await Endereco.findOne({ evento_id: evento._id });
-  
+  const organizacao = await Organizacao.findById(evento.ong_id);
+
+  if (!organizacao) {
+    throw new Error('Organização não encontrada');
+  }
+
   return {
     objectID: evento._id.toString(),
     titulo: evento.titulo,
@@ -12,20 +18,20 @@ async function mapearEventoParaAlgolia(evento) {
     dataFim: evento.data_fim,
     imagem: evento.imagem,
     vagaLimite: evento.vaga_limite,
-    organização: evento.ong_id ? {
-      _id: evento.ong_id._id.toString(),
-      nome: evento.ong_id.nome,
-      imgLogo: evento.ong_id.img_logo,
-      razaoSocial: evento.ong_id.razao_social,
-      descricao: evento.ong_id.descricao,
-      cnpj: evento.ong_id.cnpj,
-      ddd: evento.ong_id.ddd,
-      telefone: evento.ong_id.telefone,
-      associados: evento.ong_id.associados,
-      criadorId: evento.ong_id.criador_id,
-      createdAt: evento.ong_id.createdAt,
-      updatedAt: evento.ong_id.updatedAt,
-    } : null,
+    organização: {
+      _id: organizacao._id.toString(),
+      nome: organizacao.nome,
+      imgLogo: organizacao.img_logo,
+      razaoSocial: organizacao.razao_social,
+      descricao: organizacao.descricao,
+      cnpj: organizacao.cnpj,
+      ddd: organizacao.ddd,
+      telefone: organizacao.telefone,
+      associados: organizacao.associados,
+      criadorId: organizacao.criador_id,
+      createdAt: organizacao.createdAt,
+      updatedAt: organizacao.updatedAt,
+    },
     cidade: endereco ? endereco.cidade : null,
     estado: endereco ? endereco.estado : null,
     createdAt: evento.createdAt,
