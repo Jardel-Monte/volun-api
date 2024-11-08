@@ -8,6 +8,9 @@ async function mapearEventoParaAlgolia(evento) {
   if (!organizacao) {
     throw new Error('Organização não encontrada');
   }
+  if (!endereco) {
+    throw new Error('Endereço não encontrado');
+  }
 
   return {
     objectID: evento._id.toString(),
@@ -32,10 +35,18 @@ async function mapearEventoParaAlgolia(evento) {
       createdAt: organizacao.createdAt,
       updatedAt: organizacao.updatedAt,
     },
-    cidade: endereco ? endereco.cidade : null,
-    estado: endereco ? endereco.estado : null,
-    createdAt: evento.createdAt,
-    updatedAt: evento.updatedAt,
+    endereço: {
+      logradouro: endereco.logradouro,
+      bairro:     endereco.bairro,
+      cep:        endereco.cep,
+      cidade:     endereco.cidade,
+      estado:     endereco.estado,
+      numero:     endereco.numero, 
+      usuario_id: endereco.usuario_id, 
+      org_id:     endereco.org_id,
+      createdAt:  endereco.createdAt,
+      updatedAt:  endereco.updatedAt,
+    }
   };
 }
 
