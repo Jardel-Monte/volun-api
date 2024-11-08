@@ -1,7 +1,4 @@
-// eventosController.js
 const Evento = require('../models/Eventos');
-const Organizacao = require('../models/Organizacao');
-const Endereco = require('../models/Endereco');
 const index = require('../services/algoliaConfig');
 const mapearEventoParaAlgolia = require('../models/AlgoliaMapper');
 
@@ -12,7 +9,15 @@ exports.createEvento = async (req, res) => {
     await novoEvento.save();
 
     // Mapeia o evento para o formato do Algolia
-    const eventoMapeado = await mapearEventoParaAlgolia(novoEvento);
+    let eventoMapeado;
+    try {
+      eventoMapeado = await mapearEventoParaAlgolia(novoEvento);
+    } catch (error) {
+      if (error.message === 'Organização não encontrada' || error.message === 'Endereço não encontrado') {
+        return res.status(404).send(error.message);
+      }
+      throw error; // Se for outro erro, re-lança para ser tratado no bloco catch principal
+    }
 
     // Envia o novo evento para o Algolia
     await index.saveObject(eventoMapeado);
@@ -58,7 +63,15 @@ exports.updateEvento = async (req, res) => {
     }
 
     // Mapeia o evento atualizado para o formato do Algolia
-    const eventoMapeado = await mapearEventoParaAlgolia(evento);
+    let eventoMapeado;
+    try {
+      eventoMapeado = await mapearEventoParaAlgolia(evento);
+    } catch (error) {
+      if (error.message === 'Organização não encontrada' || error.message === 'Endereço não encontrado') {
+        return res.status(404).send(error.message);
+      }
+      throw error; // Se for outro erro, re-lança para ser tratado no bloco catch principal
+    }
 
     // Atualiza o evento no Algolia
     await index.partialUpdateObject(eventoMapeado);
