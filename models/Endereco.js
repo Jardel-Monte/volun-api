@@ -15,12 +15,14 @@ const enderecoSchema = new mongoose.Schema({
 }, { timestamps: true }); 
 
 // Middleware para atualizar Algolia ao modificar evento_id
-enderecoSchema.post('save', async function (doc) {
-  if (doc.evento_id) {
+enderecoSchema.pre('findOneAndUpdate', async function (next) {
+  const update = this.getUpdate();
+  
+  if (update && update.evento_id) {
     try {
-      // Buscar o evento correspondente ao evento_id do endereço
+      // Buscar o novo evento_id no update
       const Evento = require('./Eventos');
-      const evento = await Evento.findById(doc.evento_id);
+      const evento = await Evento.findById(update.evento_id);
 
       if (evento) {
         // Mapear o evento atualizado para o Algolia e atualizar o Algolia
@@ -28,9 +30,11 @@ enderecoSchema.post('save', async function (doc) {
         await index.saveObject(eventoMapeado);
       }
     } catch (error) {
-      console.error('Erro ao atualizar Algolia após modificação do endereço:', error);
+      console.error('Erro ao atualizar Algolia após modificação do evento_id no endereço:', error);
     }
   }
+
+  next();
 });
 
 module.exports = mongoose.model('Endereco', enderecoSchema);
