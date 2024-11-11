@@ -2,7 +2,7 @@ const Endereco = require('./Endereco');
 const Organizacao = require('./Organizacao');
 
 async function mapearEventoParaAlgolia(evento) {
-  const endereco = await Endereco.findOne({ evento_id: evento._id });
+  const endereco = await Endereco.findById(evento.endereco_id); // Busca por endereco_id
   const organizacao = await Organizacao.findById(evento.ong_id);
 
   if (!organizacao) {
@@ -18,7 +18,7 @@ async function mapearEventoParaAlgolia(evento) {
     dataFim: evento.data_fim,
     imagem: evento.imagem,
     vagaLimite: evento.vaga_limite,
-    organização: {
+    organizacao: {
       _id: organizacao._id.toString(),
       nome: organizacao.nome,
       imgLogo: organizacao.img_logo,
@@ -32,17 +32,17 @@ async function mapearEventoParaAlgolia(evento) {
       createdAt: organizacao.createdAt,
       updatedAt: organizacao.updatedAt,
     },
-    endereço: endereco ? {
+    endereco: endereco ? {
       logradouro: endereco.logradouro,
-      bairro:     endereco.bairro,
-      cep:        endereco.cep,
-      cidade:     endereco.cidade,
-      estado:     endereco.estado,
-      numero:     endereco.numero, 
-      usuario_id: endereco.usuario_id, 
-      org_id:     endereco.org_id,
-      createdAt:  endereco.createdAt,
-      updatedAt:  endereco.updatedAt,
+      bairro: endereco.bairro,
+      cep: endereco.cep,
+      cidade: endereco.cidade,
+      estado: endereco.estado,
+      numero: endereco.numero,
+      usuario_id: endereco.usuario_id,
+      org_id: endereco.org_id,
+      createdAt: endereco.createdAt,
+      updatedAt: endereco.updatedAt,
     } : {}, // Endereço vazio se não for encontrado
   };
 }
