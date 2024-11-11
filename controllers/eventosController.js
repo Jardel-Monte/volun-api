@@ -8,7 +8,6 @@ exports.createEvento = async (req, res) => {
     const novoEvento = new Evento(req.body);
     await novoEvento.save();
 
-    // Mapeia o evento para o formato do Algolia
     let eventoMapeado;
     try {
       eventoMapeado = await mapearEventoParaAlgolia(novoEvento);
@@ -16,7 +15,7 @@ exports.createEvento = async (req, res) => {
       if (error.message === 'Organização não encontrada' || error.message === 'Endereço não encontrado') {
         return res.status(404).send(error.message);
       }
-      throw error; // Se for outro erro, re-lança para ser tratado no bloco catch principal
+      throw error;
     }
 
     // Envia o novo evento para o Algolia
@@ -32,7 +31,7 @@ exports.createEvento = async (req, res) => {
 // Retorna todos os eventos
 exports.getEventos = async (req, res) => {
   try {
-    const eventos = await Evento.find().populate('ong_id'); // Popula todos os campos de 'ong_id'
+    const eventos = await Evento.find().populate('ong_id').populate('endereco_id'); // Popula todos os campos de 'ong_id' e 'endereco_id'
     res.status(200).json(eventos);
   } catch (error) {
     console.error('Erro ao buscar eventos:', error);
@@ -43,7 +42,7 @@ exports.getEventos = async (req, res) => {
 // Retorna um evento específico por ID
 exports.getEventoById = async (req, res) => {
   try {
-    const evento = await Evento.findById(req.params.id).populate('ong_id'); // Popula todos os campos de 'ong_id'
+    const evento = await Evento.findById(req.params.id).populate('ong_id').populate('endereco_id'); // Popula 'ong_id' e 'endereco_id'
     if (!evento) {
       return res.status(404).send('Evento não encontrado');
     }
@@ -70,7 +69,7 @@ exports.updateEvento = async (req, res) => {
       if (error.message === 'Organização não encontrada' || error.message === 'Endereço não encontrado') {
         return res.status(404).send(error.message);
       }
-      throw error; // Se for outro erro, re-lança para ser tratado no bloco catch principal
+      throw error;
     }
 
     // Atualiza o evento no Algolia
