@@ -1,5 +1,5 @@
 const EventosHistorico = require('../models/eventosHistorico');
-const verificarOuCriarHistoricoEAssociarEventos = require('../utils/utils');
+// const verificarOuCriarHistoricoEAssociarEventos = require('../utils/utils');
 
 // Cria um novo registro de histórico de eventos
 exports.createEventosHistorico = async (req, res) => {
@@ -14,7 +14,7 @@ exports.createEventosHistorico = async (req, res) => {
 
 exports.getAllEventosHistorico = async (req, res) => {
   try {
-      await verificarOuCriarHistoricoEAssociarEventos();
+      // await verificarOuCriarHistoricoEAssociarEventos();
       const historicos = await EventosHistorico.find()
           .populate('eventos_id', 'titulo descricao data_inicio imagem vaga_limite')
           .populate('ong_id', 'nome img_logo');
