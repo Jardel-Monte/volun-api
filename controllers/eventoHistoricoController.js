@@ -1,102 +1,97 @@
-const { db } = require('../config/firebase-config');
+const EventosHistorico = require('../models/eventosHistorico');
+const verificarOuCriarHistoricoEAssociarEventos = require('../utils/utils');
 
-// Função auxiliar para validar a existência de um histórico de evento
-const validateEventoHistoricoExistence = async (id) => {
-  const doc = await db.collection('evento_historico').doc(id).get();
-  if (!doc.exists) {
-    return 'Histórico de evento não encontrado.';
-  }
-  return null;
-};
-
-// Cria um novo histórico de evento
-exports.createEventoHistorico = async (req, res) => {
-  try {
-    const data = req.body;
-    if (!data || typeof data !== 'object') {
-      return res.status(400).send('Dados inválidos para criar histórico de evento.');
+// Cria um novo registro de histórico de eventos
+exports.createEventosHistorico = async (req, res) => {
+    try {
+        const novoHistorico = new EventosHistorico(req.body);
+        await novoHistorico.save();
+        res.status(201).json(novoHistorico);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao criar o histórico de eventos.' });
     }
-    await db.collection('evento_historico').add(data);
-    res.status(201).send('Histórico de evento criado com sucesso!');
-  } catch (error) {
-    console.error('Erro ao criar histórico de evento:', error);
-    res.status(500).send(`Erro ao criar histórico de evento: ${error.message}`);
-  }
 };
 
-// Retorna todos os históricos de evento com paginação
-exports.getEventosHistorico = async (req, res) => {
+exports.getAllEventosHistorico = async (req, res) => {
   try {
-    const pageSize = parseInt(req.query.pageSize) || 10;
-    const page = parseInt(req.query.page) || 1;
-
-    const snapshot = await db.collection('evento_historico')
-      .offset((page - 1) * pageSize)
-      .limit(pageSize)
-      .get();
-
-    const historico = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    res.status(200).json(historico);
+      await verificarOuCriarHistoricoEAssociarEventos();
+      const historicos = await EventosHistorico.find()
+          .populate('eventos_id', 'titulo descricao data_inicio imagem vaga_limite')
+          .populate('ong_id', 'nome img_logo');
+      res.status(200).json(historicos);
   } catch (error) {
-    console.error('Erro ao buscar históricos de evento:', error);
-    res.status(500).send(`Erro ao buscar históricos de evento: ${error.message}`);
+      res.status(500).json({ error: 'Erro ao buscar o histórico de eventos.' });
   }
 };
 
-// Retorna um histórico de evento específico
-exports.getEventoHistoricoById = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const validationError = await validateEventoHistoricoExistence(id);
-    if (validationError) {
-      return res.status(404).send(validationError);
-    }
 
-    const doc = await db.collection('evento_historico').doc(id).get();
-    res.status(200).json({ id: doc.id, ...doc.data() });
-  } catch (error) {
-    console.error('Erro ao buscar histórico de evento:', error);
-    res.status(500).send(`Erro ao buscar histórico de evento: ${error.message}`);
-  }
+// Busca um registro específico de histórico de eventos pelo ID
+exports.getEventosHistoricoById = async (req, res) => {
+    try {
+        const historico = await EventosHistorico.findById(req.params.id)
+            .populate('eventos_id', 'titulo descricao data_inicio imagem vaga_limite')
+            .populate('ong_id', 'nome img_logo');
+        if (!historico) {
+            return res.status(404).json({ error: 'Histórico de eventos não encontrado.' });
+        }
+        res.status(200).json(historico);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao buscar o histórico de eventos.' });
+    }
 };
 
-// Atualiza um histórico de evento
-exports.updateEventoHistorico = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const data = req.body;
-
-    const validationError = await validateEventoHistoricoExistence(id);
-    if (validationError) {
-      return res.status(404).send(validationError);
+// Atualiza um registro específico de histórico de eventos pelo ID
+exports.updateEventosHistorico = async (req, res) => {
+    try {
+        const historicoAtualizado = await EventosHistorico.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        )
+            .populate('eventos_id', 'titulo descricao data_inicio imagem vaga_limite')
+            .populate('ong_id', 'nome img_logo');
+        if (!historicoAtualizado) {
+            return res.status(404).json({ error: 'Histórico de eventos não encontrado.' });
+        }
+        res.status(200).json(historicoAtualizado);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao atualizar o histórico de eventos.' });
     }
-
-    if (!data || typeof data !== 'object') {
-      return res.status(400).send('Dados inválidos para atualizar histórico de evento.');
-    }
-
-    await db.collection('evento_historico').doc(id).update(data);
-    res.status(200).send('Histórico de evento atualizado com sucesso!');
-  } catch (error) {
-    console.error('Erro ao atualizar histórico de evento:', error);
-    res.status(500).send(`Erro ao atualizar histórico de evento: ${error.message}`);
-  }
 };
 
-// Deleta um histórico de evento
-exports.deleteEventoHistorico = async (req, res) => {
-  try {
-    const id = req.params.id;
-
-    const validationError = await validateEventoHistoricoExistence(id);
-    if (validationError) {
-      return res.status(404).send(validationError);
+// Exclui um registro específico de histórico de eventos pelo ID
+exports.deleteEventosHistorico = async (req, res) => {
+    try {
+        const historicoExcluido = await EventosHistorico.findByIdAndDelete(req.params.id);
+        if (!historicoExcluido) {
+            return res.status(404).json({ error: 'Histórico de eventos não encontrado.' });
+        }
+        res.status(200).json({ message: 'Histórico de eventos excluído com sucesso.' });
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao excluir o histórico de eventos.' });
     }
+};
 
-    await db.collection('evento_historico').doc(id).delete();
-    res.status(200).send('Histórico de evento deletado com sucesso!');
-  } catch (error) {
-    console.error('Erro ao deletar histórico de evento:', error);
-    res.status(500).send(`Erro ao deletar histórico de evento: ${error.message}`);
-  }
+// Busca por histórico de eventos com base no usuario_id
+exports.getEventosHistoricoByUsuarioId = async (req, res) => {
+    try {
+        const historicos = await EventosHistorico.find({ usuario_id: req.params.usuario_id })
+            .populate('eventos_id', 'titulo descricao data_inicio imagem vaga_limite')
+            .populate('ong_id');
+        res.status(200).json(historicos);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao buscar o histórico de eventos pelo usuario_id.' });
+    }
+};
+
+// Busca por histórico de eventos com base no ong_id
+exports.getEventosHistoricoByOrgId = async (req, res) => {
+    try {
+        const historicos = await EventosHistorico.find({ ong_id: req.params.ong_id })
+            .populate('eventos_id', 'titulo descricao data_inicio imagem vaga_limite')
+            .populate('ong_id', 'nome img_logo');
+        res.status(200).json(historicos);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao buscar o histórico de eventos pelo ong_id.' });
+    }
 };
