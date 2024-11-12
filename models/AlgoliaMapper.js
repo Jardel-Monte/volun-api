@@ -39,8 +39,6 @@ async function mapearEventoParaAlgolia(evento) {
       cidade: endereco.cidade,
       estado: endereco.estado,
       numero: endereco.numero,
-      usuario_id: endereco.usuario_id,
-      org_id: endereco.org_id,
       createdAt: endereco.createdAt,
       updatedAt: endereco.updatedAt,
     } : {}, // Endereço vazio se não for encontrado
