@@ -9,7 +9,7 @@ router.get('/:id', eventoHistoricoController.getEventosHistoricoById);
 router.put('/:id', eventoHistoricoController.updateEventosHistorico);
 router.delete('/:id', eventoHistoricoController.deleteEventosHistorico);
 router.get('/usuario/:usuario_id', eventoHistoricoController.getEventosHistoricoByUsuarioId);
-router.get('/org/:org_id', eventoHistoricoController.getEventosHistoricoByOrgId);
+router.get('/org/:ong_id', eventoHistoricoController.getEventosHistoricoByOrgId);
 
 module.exports = router;
 
