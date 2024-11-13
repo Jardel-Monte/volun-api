@@ -21,6 +21,7 @@ const eventoHistoricoRoutes = require('./routes/eventoHistoricoRoutes');
 const comentariosRoutes = require('./routes/comentariosRoutes');
 const denunciasRoutes = require('./routes/denunciasRoutes');
 const acoesModeracaoRoutes = require('./routes/acoesModeracaoRoutes');
+const participacaoRoutes = require('./routes/participacaoRoutes');
 
 // Define as rotas da API
 app.use('/usuarios', usuariosRoutes);
@@ -32,6 +33,7 @@ app.use('/evento-historico', eventoHistoricoRoutes);
 app.use('/comentarios', comentariosRoutes);
 app.use('/denuncias', denunciasRoutes);
 app.use('/acoes-moderacao', acoesModeracaoRoutes);
+app.use('/participacao', participacaoRoutes);
 
 
 // Tratamento de rotas não encontradas (404)
