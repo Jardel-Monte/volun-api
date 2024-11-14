@@ -1,5 +1,4 @@
 const Usuario = require('../models/Usuario');
-const EventosHistorico = require('../models/eventosHistorico')
 
 exports.addUsuarioInfo = async (req, res) => {
   try {
@@ -26,15 +25,6 @@ exports.addUsuarioInfo = async (req, res) => {
     // Salva os dados no MongoDB
     await userData.save();
 
-    
-    // Cria automaticamente um histórico de eventos para o usuário recém-criado
-    const historicoData = new EventosHistorico({
-      usuario_id: uid, 
-      eventos_id: [],
-    });
-
-    // Salva o histórico de eventos no MongoDB
-    await historicoData.save();
 
     res.status(201).json({ message: 'Informações do usuário adicionadas com sucesso!' });
   } catch (error) {
