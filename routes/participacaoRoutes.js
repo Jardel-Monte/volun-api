@@ -9,5 +9,6 @@ router.get('/evento/:evento_id', participacaoController.getParticipacoesByEvento
 router.get('/status/:status', participacaoController.getParticipacoesByStatus);
 router.put('/:id', participacaoController.updateParticipacao);
 router.delete('/:id', participacaoController.deleteParticipacao);
+router.get('/usuario/:usuario_id/evento/:evento_id', participacaoController.getParticipacaoByUsuarioAndEvento);
 
 module.exports = router;

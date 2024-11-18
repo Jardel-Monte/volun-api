@@ -106,3 +106,23 @@ exports.deleteParticipacao = async (req, res) => {
     res.status(500).send(`Erro ao excluir participação: ${error.message}`);
   }
 };
+
+// Retorna uma participação específica com base no usuario_id e evento_id
+exports.getParticipacaoByUsuarioAndEvento = async (req, res) => {
+  try {
+    const { usuario_id, evento_id } = req.params;
+
+    // Busca uma participação com base no usuario_id e evento_id
+    const participacao = await Participacao.findOne({ usuario_id, evento_id })
+      .populate('evento_id', 'titulo descricao data_inicio imagem vaga_limite');
+
+    if (!participacao) {
+      return res.status(404).send('Participação não encontrada para os parâmetros fornecidos.');
+    }
+
+    res.status(200).json(participacao);
+  } catch (error) {
+    console.error('Erro ao buscar participação por usuário e evento:', error);
+    res.status(500).send(`Erro ao buscar participação: ${error.message}`);
+  }
+};
