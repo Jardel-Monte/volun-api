@@ -99,3 +99,21 @@ exports.deleteEvento = async (req, res) => {
     res.status(500).send(`Erro ao deletar evento: ${error.message}`);
   }
 };
+
+// Retorna eventos por ong_id
+exports.getEventosByOngId = async (req, res) => {
+  try {
+    const { ong_id } = req.params; // Obtém o ID da ONG dos parâmetros da rota
+    const eventos = await Evento.find({ ong_id }).populate('ong_id').populate('endereco_id'); // Busca os eventos com o ID da ONG e popula os campos relacionados
+
+    if (!eventos || eventos.length === 0) {
+      return res.status(404).send('Nenhum evento encontrado para esta ONG.');
+    }
+
+    res.status(200).json(eventos);
+  } catch (error) {
+    console.error('Erro ao buscar eventos por ong_id:', error);
+    res.status(500).send(`Erro ao buscar eventos por ong_id: ${error.message}`);
+  }
+};
+
