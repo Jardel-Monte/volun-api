@@ -10,15 +10,21 @@ exports.createEndereco = async (req, res) => {
       return res.status(400).send('Campos obrigatórios não preenchidos: logradouro, bairro, CEP, cidade, estado.');
     }
 
+    // Cria e salva o novo endereço
     const novoEndereco = new Endereco(enderecoData);
-    await novoEndereco.save();
-    
-    res.status(201).send('Endereço criado com sucesso!');
+    const enderecoSalvo = await novoEndereco.save();
+
+    // Retorna o objeto do endereço criado
+    res.status(201).json({
+      message: 'Endereço criado com sucesso!',
+      endereco: enderecoSalvo, // Inclui todos os dados do endereço, incluindo o _id
+    });
   } catch (error) {
     console.error('Erro ao criar endereço:', error);
     res.status(500).send(`Erro ao criar endereço: ${error.message}`);
   }
 };
+
 
 // Retorna todos os endereços
 exports.getEnderecos = async (req, res) => {
