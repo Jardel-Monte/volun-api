@@ -1,9 +1,9 @@
-const express = require('express');
+const express = require('express'); 
 const bodyParser = require('body-parser');
-const swaggerUi = require('swagger-ui-express'); // Adicione isto
-const swaggerDocument = require('./swagger.json'); // Adicione isto
-
 const cors = require('cors');
+const path = require('path'); // Mova para antes do uso do `path`
+const swaggerUi = require('swagger-ui-express'); 
+const swaggerDocument = require(path.join(__dirname, 'swagger.json')); // Usa path corretamente
 
 const app = express();
 
@@ -11,7 +11,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(cors()); // Permite requisições de qualquer origem
+app.use(cors());
+
+// Middleware para servir arquivos estáticos
+app.use(express.static('public')); // Se você tem uma pasta `public` para arquivos estáticos
+app.use('/swagger-ui', express.static(path.join(__dirname, 'node_modules/swagger-ui-dist')));
 
 // Importa as rotas
 const usuariosRoutes = require('./routes/usuariosRoutes');
@@ -34,7 +38,12 @@ app.use('/comentarios', comentariosRoutes);
 app.use('/denuncias', denunciasRoutes);
 app.use('/acoes-moderacao', acoesModeracaoRoutes);
 app.use('/participacao', participacaoRoutes);
+
+// Rota para documentação Swagger
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.get('/swagger.json', (req, res) => {
+  res.sendFile(path.join(__dirname, 'swagger.json'));
+});
 
 
 // Tratamento de rotas não encontradas (404)
