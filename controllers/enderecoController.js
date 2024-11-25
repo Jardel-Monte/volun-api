@@ -77,23 +77,6 @@ exports.getEnderecoByUsuarioId = async (req, res) => {
   }
 };
 
-// Retorna endereços associados a um usuario_id específico
-exports.getEnderecoByEventoId = async (req, res) => {
-  try {
-    const evento_id = req.params.evento_id;
-    const enderecos = await Endereco.find({ evento_id });
-
-    if (!enderecos.length) {
-      return res.status(404).send('Nenhum endereço encontrado para este evento.');
-    }
-
-    res.status(200).json(enderecos);
-  } catch (error) {
-    console.error('Erro ao buscar endereços pelo evento_id:', error);
-    res.status(500).send(`Erro ao buscar endereços: ${error.message}`);
-  }
-};
-
 // Retorna endereços associados a um org_id específico
 exports.getEnderecoByOrgId = async (req, res) => {
   try {
