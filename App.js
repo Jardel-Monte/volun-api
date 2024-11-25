@@ -40,7 +40,7 @@ app.use('/acoes-moderacao', acoesModeracaoRoutes);
 app.use('/participacao', participacaoRoutes);
 
 // Rota para documentação Swagger
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get('/swagger.json', (req, res) => {
   res.sendFile(path.join(__dirname, 'swagger.json'));
 });
