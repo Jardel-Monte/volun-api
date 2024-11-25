@@ -8,7 +8,6 @@ router.get('/:id', enderecoController.getEnderecoById);
 router.put('/:id', enderecoController.updateEndereco);
 router.delete('/:id', enderecoController.deleteEndereco);
 router.get('/usuario/:usuario_id', enderecoController.getEnderecoByUsuarioId);
-router.get('/evento/:evento_id', enderecoController.getEnderecoByEventoId);
 router.get('/org/:org_id', enderecoController.getEnderecoByOrgId);
 
 module.exports = router;
