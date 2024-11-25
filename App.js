@@ -34,7 +34,7 @@ app.use('/comentarios', comentariosRoutes);
 app.use('/denuncias', denunciasRoutes);
 app.use('/acoes-moderacao', acoesModeracaoRoutes);
 app.use('/participacao', participacaoRoutes);
-app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 // Tratamento de rotas não encontradas (404)
