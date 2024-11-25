@@ -1,129 +1,108 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Documentação da Volun-API",
-    "description": "API para gerenciar usuários, organizações, eventos e comentários, moderação e etc...",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "title": "Volun API",
+    "description": "Documentação da API Volun",
+    "contact": {
+      "name": "Equipe Volun",
+      "email": "contato@volun.com"
+    }
   },
-  "host": "volun-api-eight.vercel.app",
-  "basePath": "/",
+  "host": "localhost:3000",
+  "basePath": "/api",
   "schemes": ["http"],
+  "tags": [
+    {
+      "name": "Usuario",
+      "description": "Operações relacionadas a usuários"
+    },
+    {
+      "name": "Endereco",
+      "description": "Gerenciamento de endereços"
+    },
+    {
+      "name": "Eventos",
+      "description": "Operações sobre eventos"
+    }
+  ],
   "paths": {
     "/usuarios": {
       "get": {
+        "tags": ["Usuario"],
         "summary": "Lista todos os usuários",
-        "description": "Retorna uma lista com todos os usuários cadastrados.",
+        "description": "Retorna uma lista com todos os usuários cadastrados",
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Lista de usuários",
             "schema": {
               "type": "array",
-              "items": { "$ref": "#/definitions/Usuario" }
+              "items": {
+                "$ref": "#/definitions/Usuario"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Usuario"],
+        "summary": "Cria um novo usuário",
+        "description": "Adiciona um novo usuário ao sistema",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Usuario"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Usuário criado com sucesso"
+          },
+          "400": {
+            "description": "Erro de validação"
+          }
+        }
+      }
+    },
+    "/enderecos": {
+      "get": {
+        "tags": ["Endereco"],
+        "summary": "Lista todos os endereços",
+        "description": "Retorna uma lista com todos os endereços cadastrados",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Lista de endereços",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Endereco"
+              }
             }
           }
         }
       }
     },
-    "/usuarios/{id}": {
+    "/eventos": {
       "get": {
-        "summary": "Obtém um usuário específico",
-        "description": "Retorna os dados de um usuário pelo seu ID.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "ID do usuário"
-          }
-        ],
+        "tags": ["Eventos"],
+        "summary": "Lista todos os eventos",
+        "description": "Retorna uma lista com todos os eventos cadastrados",
+        "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "Usuário encontrado",
-            "schema": { "$ref": "#/definitions/Usuario" }
-          },
-          "404": {
-            "description": "Usuário não encontrado"
-          }
-        }
-      },
-      "put": {
-        "summary": "Atualiza um usuário",
-        "description": "Atualiza os dados de um usuário existente.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "ID do usuário"
-          },
-          {
-            "in": "body",
-            "name": "usuario",
-            "description": "Dados do usuário a ser atualizado",
-            "schema": { "$ref": "#/definitions/Usuario" }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Usuário atualizado com sucesso"
-          },
-          "400": {
-            "description": "Dados inválidos"
-          },
-          "404": {
-            "description": "Usuário não encontrado"
-          }
-        }
-      },
-      "delete": {
-        "summary": "Deleta um usuário",
-        "description": "Deleta um usuário pelo seu ID.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "ID do usuário"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Usuário deletado com sucesso"
-          },
-          "404": {
-            "description": "Usuário não encontrado"
-          }
-        }
-      }
-    },
-    "/usuarios/{uid}/info": {
-      "post": {
-        "summary": "Adiciona informações adicionais para o usuário",
-        "description": "Adiciona informações extras para o usuário com base no UID.",
-        "parameters": [
-          {
-            "name": "uid",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "UID do usuário"
-          },
-          {
-            "in": "body",
-            "name": "info",
-            "description": "Informações adicionais do usuário",
-            "schema": { "$ref": "#/definitions/UsuarioInfo" }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Informações do usuário adicionadas com sucesso"
-          },
-          "400": {
-            "description": "Dados inválidos"
+            "description": "Lista de eventos",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Evento"
+              }
+            }
           }
         }
       }
@@ -133,25 +112,71 @@
     "Usuario": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "example": "64b34f5e4d3244567"
+        },
         "nome": {
-          "type": "string"
+          "type": "string",
+          "example": "João Silva"
         },
         "email": {
-          "type": "string"
+          "type": "string",
+          "example": "joao@email.com"
         },
-        "idade": {
-          "type": "integer"
+        "senha": {
+          "type": "string",
+          "example": "senha123"
         }
       }
     },
-    "UsuarioInfo": {
+    "Endereco": {
       "type": "object",
       "properties": {
-        "endereco": {
-          "type": "string"
+        "id": {
+          "type": "string",
+          "example": "64b34f5e4d3244568"
         },
-        "telefone": {
-          "type": "string"
+        "cidade": {
+          "type": "string",
+          "example": "São Paulo"
+        },
+        "estado": {
+          "type": "string",
+          "example": "SP"
+        },
+        "rua": {
+          "type": "string",
+          "example": "Avenida Paulista"
+        },
+        "numero": {
+          "type": "integer",
+          "example": 1000
+        }
+      }
+    },
+    "Evento": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "64b34f5e4d3244569"
+        },
+        "titulo": {
+          "type": "string",
+          "example": "Evento Voluntário"
+        },
+        "descricao": {
+          "type": "string",
+          "example": "Um evento para ajudar comunidades locais"
+        },
+        "data": {
+          "type": "string",
+          "example": "2024-11-25"
+        },
+        "endereco_id": {
+          "type": "string",
+          "example": "64b34f5e4d3244568"
         }
       }
     }

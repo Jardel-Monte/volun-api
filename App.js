@@ -1,5 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const swaggerUi = require('swagger-ui-express'); // Adicione isto
+const swaggerDocument = require('./swagger.json'); // Adicione isto
+
 const cors = require('cors');
 
 const app = express();
@@ -7,7 +10,6 @@ const app = express();
 // Middleware para parsing do body em JSON
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 app.use(cors()); // Permite requisições de qualquer origem
 
@@ -17,7 +19,6 @@ const usuariosRoutes = require('./routes/usuariosRoutes');
 const organizacaoRoutes = require('./routes/organizacaoRoutes');
 const eventosRoutes = require('./routes/eventosRoutes');
 const enderecoRoutes = require('./routes/enderecoRoutes');
-const eventoHistoricoRoutes = require('./routes/eventoHistoricoRoutes');
 const comentariosRoutes = require('./routes/comentariosRoutes');
 const denunciasRoutes = require('./routes/denunciasRoutes');
 const acoesModeracaoRoutes = require('./routes/acoesModeracaoRoutes');
@@ -29,11 +30,11 @@ app.use('/usuarios', usuariosRoutes);
 app.use('/organizacao', organizacaoRoutes);
 app.use('/eventos', eventosRoutes);
 app.use('/endereco', enderecoRoutes);
-app.use('/evento-historico', eventoHistoricoRoutes);
 app.use('/comentarios', comentariosRoutes);
 app.use('/denuncias', denunciasRoutes);
 app.use('/acoes-moderacao', acoesModeracaoRoutes);
 app.use('/participacao', participacaoRoutes);
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 // Tratamento de rotas não encontradas (404)
