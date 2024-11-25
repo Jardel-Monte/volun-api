@@ -3,182 +3,720 @@
   "info": {
     "version": "1.0.0",
     "title": "Volun API",
-    "description": "Documentação da API Volun",
-    "contact": {
-      "name": "Equipe Volun",
-      "email": "contato@volun.com"
-    }
+    "description": "Documentação da API para gerenciamento de usuários, eventos e organizações."
   },
-  "host": "localhost:3000",
-  "basePath": "/api",
-  "schemes": ["http"],
-  "tags": [
-    {
-      "name": "Usuario",
-      "description": "Operações relacionadas a usuários"
-    },
-    {
-      "name": "Endereco",
-      "description": "Gerenciamento de endereços"
-    },
-    {
-      "name": "Eventos",
-      "description": "Operações sobre eventos"
-    }
-  ],
-  "paths": {
+  "host": "sua-api-hospedada.com",
+  "basePath": "/",
+  "schemes": ["https"],
+ "paths": {
     "/usuarios": {
+      "post": {
+        "summary": "Criar um novo usuário",
+        "description": "Adiciona um novo usuário à base de dados.",
+        "tags": ["Usuários"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Dados do usuário",
+            "schema": { "$ref": "#/definitions/Usuario" }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Usuário criado com sucesso",
+            "schema": { "$ref": "#/definitions/Usuario" }
+          },
+          "400": {
+            "description": "Erro na validação dos dados"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
       "get": {
-        "tags": ["Usuario"],
-        "summary": "Lista todos os usuários",
-        "description": "Retorna uma lista com todos os usuários cadastrados",
-        "produces": ["application/json"],
+        "summary": "Listar todos os usuários",
+        "description": "Retorna uma lista de todos os usuários cadastrados.",
+        "tags": ["Usuários"],
         "responses": {
           "200": {
             "description": "Lista de usuários",
             "schema": {
               "type": "array",
-              "items": {
-                "$ref": "#/definitions/Usuario"
-              }
+              "items": { "$ref": "#/definitions/Usuario" }
             }
-          }
-        }
-      },
-      "post": {
-        "tags": ["Usuario"],
-        "summary": "Cria um novo usuário",
-        "description": "Adiciona um novo usuário ao sistema",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Usuario"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Usuário criado com sucesso"
           },
-          "400": {
-            "description": "Erro de validação"
+          "500": {
+            "description": "Erro interno do servidor"
           }
         }
       }
     },
-    "/enderecos": {
+    "/usuarios/{id}": {
       "get": {
-        "tags": ["Endereco"],
-        "summary": "Lista todos os endereços",
-        "description": "Retorna uma lista com todos os endereços cadastrados",
-        "produces": ["application/json"],
+        "summary": "Buscar usuário por ID",
+        "description": "Retorna os dados de um usuário específico pelo seu ID.",
+        "tags": ["Usuários"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do usuário",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Lista de endereços",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Endereco"
-              }
-            }
+            "description": "Dados do usuário",
+            "schema": { "$ref": "#/definitions/Usuario" }
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar um usuário",
+        "description": "Atualiza os dados de um usuário pelo seu ID.",
+        "tags": ["Usuários"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do usuário",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Dados do usuário a serem atualizados",
+            "schema": { "$ref": "#/definitions/Usuario" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário atualizado com sucesso",
+            "schema": { "$ref": "#/definitions/Usuario" }
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Excluir um usuário",
+        "description": "Remove um usuário da base de dados pelo ID.",
+        "tags": ["Usuários"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do usuário",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário excluído com sucesso"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
           }
         }
       }
     },
     "/eventos": {
-      "get": {
+      "post": {
+        "summary": "Criar um novo evento",
+        "description": "Adiciona um novo evento à base de dados.",
         "tags": ["Eventos"],
-        "summary": "Lista todos os eventos",
-        "description": "Retorna uma lista com todos os eventos cadastrados",
-        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Dados do evento",
+            "schema": { "$ref": "#/definitions/Evento" }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Evento criado com sucesso",
+            "schema": { "$ref": "#/definitions/Evento" }
+          },
+          "400": {
+            "description": "Erro na validação dos dados"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "get": {
+        "summary": "Listar todos os eventos",
+        "description": "Retorna uma lista de todos os eventos cadastrados.",
+        "tags": ["Eventos"],
         "responses": {
           "200": {
             "description": "Lista de eventos",
             "schema": {
               "type": "array",
-              "items": {
-                "$ref": "#/definitions/Evento"
-              }
+              "items": { "$ref": "#/definitions/Evento" }
             }
+          },
+          "500": {
+            "description": "Erro interno do servidor"
           }
         }
       }
+    },
+    "/eventos/{id}": {
+      "get": {
+        "summary": "Buscar evento por ID",
+        "description": "Retorna os dados de um evento específico pelo seu ID.",
+        "tags": ["Eventos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do evento",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do evento",
+            "schema": { "$ref": "#/definitions/Evento" }
+          },
+          "404": {
+            "description": "Evento não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar um evento",
+        "description": "Atualiza os dados de um evento pelo seu ID.",
+        "tags": ["Eventos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do evento",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Dados do evento a serem atualizados",
+            "schema": { "$ref": "#/definitions/Evento" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Evento atualizado com sucesso",
+            "schema": { "$ref": "#/definitions/Evento" }
+          },
+          "404": {
+            "description": "Evento não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Excluir um evento",
+        "description": "Remove um evento da base de dados pelo ID.",
+        "tags": ["Eventos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do evento",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Evento excluído com sucesso"
+          },
+          "404": {
+            "description": "Evento não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/eventos/ong/{ong_id}": {
+      "get": {
+        "summary": "Listar eventos de uma ONG",
+        "description": "Retorna os eventos relacionados a uma ONG específica pelo seu ID.",
+        "tags": ["Eventos"],
+        "parameters": [
+          {
+            "name": "ong_id",
+            "in": "path",
+            "required": true,
+            "description": "ID da ONG",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de eventos da ONG",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Evento" }
+            }
+          },
+          "404": {
+            "description": "Nenhum evento encontrado para a ONG"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/endereco": {
+  "post": {
+    "summary": "Criar um novo endereço",
+    "description": "Adiciona um novo endereço à base de dados.",
+    "tags": ["Endereços"],
+    "parameters": [
+      {
+        "name": "body",
+        "in": "body",
+        "required": true,
+        "description": "Dados do endereço",
+        "schema": { "$ref": "#/definitions/Endereco" }
+      }
+    ],
+    "responses": {
+      "201": {
+        "description": "Endereço criado com sucesso",
+        "schema": { "$ref": "#/definitions/Endereco" }
+      },
+      "400": {
+        "description": "Erro na validação dos dados"
+      },
+      "500": {
+        "description": "Erro interno do servidor"
+      }
     }
   },
+  "get": {
+    "summary": "Listar todos os endereços",
+    "description": "Retorna uma lista de todos os endereços cadastrados.",
+    "tags": ["Endereços"],
+    "responses": {
+      "200": {
+        "description": "Lista de endereços",
+        "schema": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Endereco" }
+        }
+      },
+      "500": {
+        "description": "Erro interno do servidor"
+      }
+    }
+  }
+    },
+    "/endereco/{id}": {
+      "get": {
+        "summary": "Buscar endereço por ID",
+        "description": "Retorna os dados de um endereço específico pelo seu ID.",
+        "tags": ["Endereços"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do endereço",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do endereço",
+            "schema": { "$ref": "#/definitions/Endereco" }
+          },
+          "404": {
+            "description": "Endereço não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar um endereço",
+        "description": "Atualiza os dados de um endereço pelo seu ID.",
+        "tags": ["Endereços"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do endereço",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Dados do endereço a serem atualizados",
+            "schema": { "$ref": "#/definitions/Endereco" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Endereço atualizado com sucesso",
+            "schema": { "$ref": "#/definitions/Endereco" }
+          },
+          "404": {
+            "description": "Endereço não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Excluir um endereço",
+        "description": "Remove um endereço da base de dados pelo ID.",
+        "tags": ["Endereços"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do endereço",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Endereço excluído com sucesso"
+          },
+          "404": {
+            "description": "Endereço não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/endereco/usuario/{usuario_id}": {
+      "get": {
+        "summary": "Listar endereços por usuário",
+        "description": "Retorna todos os endereços associados a um usuário específico.",
+        "tags": ["Endereços"],
+        "parameters": [
+          {
+            "name": "usuario_id",
+            "in": "path",
+            "required": true,
+            "description": "ID do usuário",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de endereços do usuário",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Endereco" }
+            }
+          },
+          "404": {
+            "description": "Nenhum endereço encontrado para o usuário"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/endereco/org/{org_id}": {
+      "get": {
+        "summary": "Listar endereços por organização",
+        "description": "Retorna todos os endereços associados a uma organização específica.",
+        "tags": ["Endereços"],
+        "parameters": [
+          {
+            "name": "org_id",
+            "in": "path",
+            "required": true,
+            "description": "ID da organização",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de endereços da organização",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Endereco" }
+            }
+          },
+          "404": {
+            "description": "Nenhum endereço encontrado para a organização"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/organizacao": {
+      "post": {
+        "summary": "Criar uma nova organização",
+        "description": "Adiciona uma nova organização à base de dados.",
+        "tags": ["Organizações"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Dados da organização",
+            "schema": { "$ref": "#/definitions/Organizacao" }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Organização criada com sucesso",
+            "schema": { "$ref": "#/definitions/Organizacao" }
+          },
+          "400": {
+            "description": "Erro na validação dos dados"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "get": {
+        "summary": "Listar todas as organizações",
+        "description": "Retorna uma lista de todas as organizações cadastradas.",
+        "tags": ["Organizações"],
+        "responses": {
+          "200": {
+            "description": "Lista de organizações",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Organizacao" }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/organizacao/{id}": {
+      "get": {
+        "summary": "Buscar organização por ID",
+        "description": "Retorna os dados de uma organização específica pelo seu ID.",
+        "tags": ["Organizações"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID da organização",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados da organização",
+            "schema": { "$ref": "#/definitions/Organizacao" }
+          },
+          "404": {
+            "description": "Organização não encontrada"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar uma organização",
+        "description": "Atualiza os dados de uma organização pelo seu ID.",
+        "tags": ["Organizações"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID da organização",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Dados da organização a serem atualizados",
+            "schema": { "$ref": "#/definitions/Organizacao" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organização atualizada com sucesso",
+            "schema": { "$ref": "#/definitions/Organizacao" }
+          },
+          "404": {
+            "description": "Organização não encontrada"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Excluir uma organização",
+        "description": "Remove uma organização da base de dados pelo ID.",
+        "tags": ["Organizações"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID da organização",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organização excluída com sucesso"
+          },
+          "404": {
+            "description": "Organização não encontrada"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/organizacao/criador/{criador_id}": {
+      "get": {
+        "summary": "Listar organizações por criador",
+        "description": "Retorna todas as organizações associadas a um criador específico.",
+        "tags": ["Organizações"],
+        "parameters": [
+          {
+            "name": "criador_id",
+            "in": "path",
+            "required": true,
+            "description": "ID do criador",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de organizações do criador",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Organizacao" }
+            }
+          },
+          "404": {
+            "description": "Nenhuma organização encontrada para o criador"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+
+
   "definitions": {
     "Usuario": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "example": "64b34f5e4d3244567"
-        },
-        "nome": {
-          "type": "string",
-          "example": "João Silva"
-        },
-        "email": {
-          "type": "string",
-          "example": "joao@email.com"
-        },
-        "senha": {
-          "type": "string",
-          "example": "senha123"
-        }
-      }
-    },
-    "Endereco": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "example": "64b34f5e4d3244568"
-        },
-        "cidade": {
-          "type": "string",
-          "example": "São Paulo"
-        },
-        "estado": {
-          "type": "string",
-          "example": "SP"
-        },
-        "rua": {
-          "type": "string",
-          "example": "Avenida Paulista"
-        },
-        "numero": {
-          "type": "integer",
-          "example": 1000
-        }
+        "_id": { "type": "string" },
+        "nome": { "type": "string" },
+        "sobrenome": { "type": "string" },
+        "cpf": { "type": "string" },
+        "email": { "type": "string" },
+        "data_nascimento": { "type": "string" }
       }
     },
     "Evento": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "example": "64b34f5e4d3244569"
+        "_id": { "type": "string" },
+        "titulo": { "type": "string" },
+        "descricao": { "type": "string" },
+        "data": { "type": "string" },
+        "hora": { "type": "string" },
+        "ong_id": { "type": "string" },
+        "vagas": { "type": "number" }
+      }
+    },
+    "Endereco": {
+      "type": "object",
+      "properties": {
+        "_id": { "type": "string" },
+        "logradouro": { "type": "string" },
+        "bairro": { "type": "string" },
+        "cep": { "type": "string" },
+        "cidade": { "type": "string" },
+        "estado": { "type": "string" },
+        "numero": { "type": "string" },
+        "usuario_id": { "type": "string", "default": null },
+        "org_id": { "type": "string", "default": null }
+      }
+    },
+    "Organizacao": {
+      "type": "object",
+      "properties": {
+        "_id": { "type": "string" },
+        "nome": { "type": "string" },
+        "img_logo": { "type": "string", "default": null },
+        "razao_social": { "type": "string" },
+        "descricao": { "type": "string" },
+        "cnpj": { "type": "string" },
+        "ddd": { "type": "string" },
+        "telefone": { "type": "string" },
+        "associados": {
+          "type": "array",
+          "items": { "type": "string" }
         },
-        "titulo": {
-          "type": "string",
-          "example": "Evento Voluntário"
-        },
-        "descricao": {
-          "type": "string",
-          "example": "Um evento para ajudar comunidades locais"
-        },
-        "data": {
-          "type": "string",
-          "example": "2024-11-25"
-        },
-        "endereco_id": {
-          "type": "string",
-          "example": "64b34f5e4d3244568"
-        }
+        "criador_id": { "type": "string" }
       }
     }
+
+
   }
+ }
 }
