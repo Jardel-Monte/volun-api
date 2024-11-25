@@ -13,6 +13,7 @@ async function mapearEventoParaAlgolia(evento) {
     objectID: evento._id.toString(),
     titulo: evento.titulo,
     descricao: evento.descricao,
+    descricao_2: evento.descricao_2,
     tags: evento.tags,
     dataInicio: evento.data_inicio,
     dataFim: evento.data_fim,
