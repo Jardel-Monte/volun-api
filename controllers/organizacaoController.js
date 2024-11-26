@@ -1,4 +1,28 @@
-const Organizacao = require('../models/Organizacao'); // Importa o modelo de Organização
+const Organizacao = require('../models/Organizacao');
+const Evento = require('../models/Eventos');
+const index = require('../services/algoliaConfig');
+const mapearEventoParaAlgolia = require('../models/AlgoliaMapper');
+
+// Atualiza eventos associados a uma organização no Algolia
+const atualizarEventosAssociados = async (ongId) => {
+  try {
+    const eventos = await Evento.find({ ong_id: ongId });
+
+    if (eventos.length === 0) {
+      console.log('Nenhum evento encontrado para a organização:', ongId);
+      return;
+    }
+
+    const eventosMapeados = await Promise.all(eventos.map(mapearEventoParaAlgolia));
+
+    // Atualiza os eventos no Algolia
+    await index.partialUpdateObjects(eventosMapeados);
+    console.log('Eventos associados atualizados com sucesso no Algolia.');
+  } catch (error) {
+    console.error('Erro ao atualizar eventos associados no Algolia:', error);
+    throw error;
+  }
+};
 
 // Cria uma nova organização
 exports.createOrganizacao = async (req, res) => {
@@ -63,6 +87,10 @@ exports.updateOrganizacao = async (req, res) => {
 
     // Atualizar organização
     await Organizacao.findByIdAndUpdate(id, data, { new: true });
+
+    // Atualiza os eventos associados no Algolia
+    await atualizarEventosAssociados(id);
+
     res.status(200).send('Organização atualizada com sucesso!');
   } catch (error) {
     console.error('Erro ao atualizar organização:', error);
@@ -80,7 +108,12 @@ exports.deleteOrganizacao = async (req, res) => {
       return res.status(404).send('Organização não encontrada');
     }
 
+    // Deleta a organização do banco de dados
     await Organizacao.findByIdAndDelete(id);
+
+    // Atualiza os eventos associados no Algolia
+    await atualizarEventosAssociados(id);
+
     res.status(200).send('Organização deletada com sucesso!');
   } catch (error) {
     console.error('Erro ao deletar organização:', error);
@@ -100,6 +133,6 @@ exports.getOrganizacaoByCriadorId = async (req, res) => {
     res.status(200).json(organizacoes);
   } catch (error) {
     console.error('Erro ao buscar Organização pelo criador_id:', error);
-    res.status(500).send(`Erro ao buscar Organizaçôes: ${error.message}`);
+    res.status(500).send(`Erro ao buscar Organizações: ${error.message}`);
   }
 };
