@@ -3,9 +3,9 @@
   "info": {
     "version": "1.0.0",
     "title": "Volun API",
-    "description": "Documentação da API para gerenciamento de usuários, eventos e organizações."
+    "description": "Documentação da Volun API para gerenciamento de ENDPOINTS e Models de usuários, eventos e organizações, endereços e afins. complemente os endpoints com URL api. ex: volun-api-eight.vercel.app/eventos"
   },
-  "host": "sua-api-hospedada.com",
+  "host": "volun-api-eight.vercel.app",
   "basePath": "/",
   "schemes": ["https"],
  "paths": {
@@ -303,30 +303,30 @@
       }
     },
     "/endereco": {
-  "post": {
-    "summary": "Criar um novo endereço",
-    "description": "Adiciona um novo endereço à base de dados.",
-    "tags": ["Endereços"],
-    "parameters": [
-      {
-        "name": "body",
-        "in": "body",
-        "required": true,
-        "description": "Dados do endereço",
-        "schema": { "$ref": "#/definitions/Endereco" }
-      }
-    ],
-    "responses": {
-      "201": {
-        "description": "Endereço criado com sucesso",
-        "schema": { "$ref": "#/definitions/Endereco" }
-      },
-      "400": {
-        "description": "Erro na validação dos dados"
-      },
-      "500": {
-        "description": "Erro interno do servidor"
-      }
+      "post": {
+        "summary": "Criar um novo endereço",
+        "description": "Adiciona um novo endereço à base de dados.",
+        "tags": ["Endereços"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Dados do endereço",
+            "schema": { "$ref": "#/definitions/Endereco" }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Endereço criado com sucesso",
+            "schema": { "$ref": "#/definitions/Endereco" }
+          },
+          "400": {
+            "description": "Erro na validação dos dados"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
     }
   },
   "get": {
@@ -657,10 +657,670 @@
         }
       }
     },
+    "/participacao": {
+      "post": {
+        "summary": "Registrar participação",
+        "description": "Cria uma nova participação associada a um usuário e evento.",
+        "tags": ["Participações"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Dados da participação",
+            "schema": { "$ref": "#/definitions/Participacao" }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Participação registrada com sucesso",
+            "schema": { "$ref": "#/definitions/Participacao" }
+          },
+          "400": {
+            "description": "Erro na validação dos dados"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "get": {
+        "summary": "Listar todas as participações",
+        "description": "Retorna uma lista com todas as participações registradas.",
+        "tags": ["Participações"],
+        "responses": {
+          "200": {
+            "description": "Lista de participações",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Participacao" }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+  }
+    },
+    "/participacao/usuario/{usuario_id}": {
+      "get": {
+        "summary": "Listar participações por usuário",
+        "description": "Retorna todas as participações associadas a um usuário específico.",
+        "tags": ["Participações"],
+        "parameters": [
+          {
+            "name": "usuario_id",
+            "in": "path",
+            "required": true,
+            "description": "ID do usuário",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de participações do usuário",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Participacao" }
+            }
+          },
+          "404": {
+            "description": "Nenhuma participação encontrada para o usuário"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/participacao/evento/{evento_id}": {
+      "get": {
+        "summary": "Listar participações por evento",
+        "description": "Retorna todas as participações associadas a um evento específico.",
+        "tags": ["Participações"],
+        "parameters": [
+          {
+            "name": "evento_id",
+            "in": "path",
+            "required": true,
+            "description": "ID do evento",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de participações do evento",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Participacao" }
+            }
+          },
+          "404": {
+            "description": "Nenhuma participação encontrada para o evento"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/participacao/status/{status}": {
+      "get": {
+        "summary": "Listar participações por status",
+        "description": "Retorna todas as participações com um status específico.",
+        "tags": ["Participações"],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "path",
+            "required": true,
+            "description": "Status da participação (e.g., confirmado, cancelado)",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de participações com o status especificado",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Participacao" }
+            }
+          },
+          "404": {
+            "description": "Nenhuma participação encontrada com o status especificado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/participacao/usuario/{usuario_id}/evento/{evento_id}": {
+      "get": {
+        "summary": "Buscar participação por usuário e evento",
+        "description": "Retorna uma participação específica associada a um usuário e evento.",
+        "tags": ["Participações"],
+        "parameters": [
+          {
+            "name": "usuario_id",
+            "in": "path",
+            "required": true,
+            "description": "ID do usuário",
+            "type": "string"
+          },
+          {
+            "name": "evento_id",
+            "in": "path",
+            "required": true,
+            "description": "ID do evento",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados da participação",
+            "schema": { "$ref": "#/definitions/Participacao" }
+          },
+          "404": {
+            "description": "Nenhuma participação encontrada para o usuário e evento especificados"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/participacao/{id}": {
+      "put": {
+        "summary": "Atualizar participação",
+        "description": "Atualiza os dados de uma participação específica pelo ID.",
+        "tags": ["Participações"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID da participação",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Dados da participação a serem atualizados",
+            "schema": { "$ref": "#/definitions/Participacao" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Participação atualizada com sucesso",
+            "schema": { "$ref": "#/definitions/Participacao" }
+          },
+          "404": {
+            "description": "Participação não encontrada"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Excluir participação",
+        "description": "Remove uma participação da base de dados pelo ID.",
+        "tags": ["Participações"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID da participação",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Participação excluída com sucesso"
+          },
+          "404": {
+            "description": "Participação não encontrada"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/denuncias": {
+  "post": {
+    "summary": "Criar denúncia",
+    "description": "Registra uma nova denúncia, especificando o denunciante, o motivo e uma descrição.",
+    "tags": ["Denúncias"],
+    "parameters": [
+      {
+        "name": "body",
+        "in": "body",
+        "required": true,
+        "description": "Dados da denúncia",
+        "schema": { "$ref": "#/definitions/Denuncia" }
+      }
+    ],
+    "responses": {
+      "201": {
+        "description": "Denúncia criada com sucesso",
+        "schema": { "$ref": "#/definitions/Denuncia" }
+      },
+      "400": {
+        "description": "Erro na validação dos dados"
+      },
+      "500": {
+        "description": "Erro interno do servidor"
+      }
+    }
+  },
+  "get": {
+    "summary": "Listar todas as denúncias",
+    "description": "Retorna todas as denúncias registradas.",
+    "tags": ["Denúncias"],
+    "responses": {
+      "200": {
+        "description": "Lista de denúncias",
+        "schema": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Denuncia" }
+        }
+      },
+      "500": {
+        "description": "Erro interno do servidor"
+      }
+    }
+  }
+    },
+    "/denuncias/{id}": {
+      "get": {
+        "summary": "Obter denúncia por ID",
+        "description": "Retorna os detalhes de uma denúncia específica pelo ID.",
+        "tags": ["Denúncias"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID da denúncia",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados da denúncia",
+            "schema": { "$ref": "#/definitions/Denuncia" }
+          },
+          "404": {
+            "description": "Denúncia não encontrada"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Excluir denúncia",
+        "description": "Remove uma denúncia específica pelo ID.",
+        "tags": ["Denúncias"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID da denúncia",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Denúncia excluída com sucesso"
+          },
+          "404": {
+            "description": "Denúncia não encontrada"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/comentarios": {
+  "post": {
+    "summary": "Criar comentário",
+    "description": "Adiciona um novo comentário associado a um evento.",
+    "tags": ["Comentários"],
+    "parameters": [
+      {
+        "name": "body",
+        "in": "body",
+        "required": true,
+        "description": "Dados do comentário",
+        "schema": { "$ref": "#/definitions/Comentario" }
+      }
+    ],
+    "responses": {
+      "201": {
+        "description": "Comentário criado com sucesso",
+        "schema": { "$ref": "#/definitions/Comentario" }
+      },
+      "400": {
+        "description": "Erro na validação dos dados"
+      },
+      "500": {
+        "description": "Erro interno do servidor"
+      }
+    }
+  },
+  "get": {
+    "summary": "Listar todos os comentários",
+    "description": "Retorna todos os comentários registrados.",
+    "tags": ["Comentários"],
+    "responses": {
+      "200": {
+        "description": "Lista de comentários",
+        "schema": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Comentario" }
+        }
+      },
+      "500": {
+        "description": "Erro interno do servidor"
+      }
+    }
+  }
+    },
+    "/comentarios/{id}": {
+      "get": {
+        "summary": "Obter comentário por ID",
+        "description": "Retorna os detalhes de um comentário específico pelo ID.",
+        "tags": ["Comentários"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do comentário",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do comentário",
+            "schema": { "$ref": "#/definitions/Comentario" }
+          },
+          "404": {
+            "description": "Comentário não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar comentário",
+        "description": "Atualiza os dados de um comentário existente.",
+        "tags": ["Comentários"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do comentário",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Novos dados do comentário",
+            "schema": { "$ref": "#/definitions/Comentario" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comentário atualizado com sucesso",
+            "schema": { "$ref": "#/definitions/Comentario" }
+          },
+          "400": {
+            "description": "Erro na validação dos dados"
+          },
+          "404": {
+            "description": "Comentário não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Excluir comentário",
+        "description": "Remove um comentário específico pelo ID.",
+        "tags": ["Comentários"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do comentário",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comentário excluído com sucesso"
+          },
+          "404": {
+            "description": "Comentário não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/comentarios/evento/{evento_id}": {
+      "get": {
+        "summary": "Listar comentários por evento",
+        "description": "Retorna todos os comentários associados a um evento específico.",
+        "tags": ["Comentários"],
+        "parameters": [
+          {
+            "name": "evento_id",
+            "in": "path",
+            "required": true,
+            "description": "ID do evento",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de comentários do evento",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Comentario" }
+            }
+          },
+          "404": {
+            "description": "Evento não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/acoes-moderacao": {
+      "post": {
+        "tags": ["Ações de Moderação"],
+        "summary": "Criar uma nova ação de moderação",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcoesModeracao"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ação de moderação criada com sucesso"
+          },
+          "400": {
+            "description": "Erro na requisição"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Ações de Moderação"],
+        "summary": "Listar todas as ações de moderação",
+        "responses": {
+          "200": {
+            "description": "Lista de ações de moderação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AcoesModeracao"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/acoes-moderacao/{id}": {
+      "get": {
+        "tags": ["Ações de Moderação"],
+        "summary": "Obter detalhes de uma ação de moderação",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da ação de moderação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcoesModeracao"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ação de moderação não encontrada"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Ações de Moderação"],
+        "summary": "Atualizar uma ação de moderação",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcoesModeracao"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ação de moderação atualizada com sucesso"
+          },
+          "404": {
+            "description": "Ação de moderação não encontrada"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Ações de Moderação"],
+        "summary": "Deletar uma ação de moderação",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Ação de moderação deletada com sucesso"
+          },
+          "404": {
+            "description": "Ação de moderação não encontrada"
+          }
+        }
+      }
+    },
+    "/acoes-moderacao/mod/{moderador_id}": {
+      "get": {
+        "tags": ["Ações de Moderação"],
+        "summary": "Obter ações de moderação por moderador",
+        "parameters": [
+          {
+            "name": "moderador_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de ações do moderador",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AcoesModeracao"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Nenhuma ação encontrada para o moderador"
+          }
+        }
+      }
+    }
 
 
-  "definitions": {
-    "Usuario": {
+
+ },
+ "definitions": {
+    "usuarios": {
       "type": "object",
       "properties": {
         "_id": { "type": "string" },
@@ -714,9 +1374,94 @@
         },
         "criador_id": { "type": "string" }
       }
+    },
+    "Participacao": {
+      "type": "object",
+      "properties": {
+        "_id": { "type": "string" },
+        "usuario_id": { "type": "string" },
+        "evento_id": { "type": "string" },
+        "status": { "type": "string", "default": "confirmado" },
+        "data_inscricao": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Denuncia": {
+      "type": "object",
+      "properties": {
+        "_id": { "type": "string" },
+        "denunciante_id": { "type": "string", "description": "ID do usuário denunciante (Firebase UID)" },
+        "denunciado_id": { "type": "string", "description": "ID do usuário denunciado (Firebase UID, opcional)" },
+        "comentario_id": { "type": "string", "description": "ID do comentário associado (opcional)" },
+        "evento_id": { "type": "string", "description": "ID do evento associado (opcional)" },
+        "org_id": { "type": "string", "description": "ID da organização associada (opcional)" },
+        "motivo": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Motivos da denúncia, como tags (e.g., 'Racismo', 'Conteúdo ofensivo')"
+        },
+        "descricao": { "type": "string", "description": "Descrição detalhada da denúncia" },
+        "data": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Data de criação da denúncia"
+        }
+      }
+    },
+    "Comentario": {
+      "type": "object",
+      "properties": {
+        "_id": { "type": "string" },
+        "evento_id": { "type": "string", "description": "ID do evento associado" },
+        "usuario_id": { "type": "string", "description": "ID do usuário autor do comentário" },
+        "conteudo": { "type": "string", "description": "Texto do comentário" },
+        "data_criacao": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Data de criação do comentário"
+        },
+        "data_atualizacao": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Data da última atualização do comentário"
+        }
+      }
+    },
+    "AcoesModeracao": {
+      "type": "object",
+      "properties": {
+        "moderador_id": {
+          "type": "string",
+          "description": "ID do moderador que tomou a ação"
+        },
+        "alvo_tipo": {
+          "type": "string",
+          "description": "Tipo de alvo da ação ('usuario', 'evento', 'comentario', etc.)"
+        },
+        "alvo_id": {
+          "type": "string",
+          "description": "ID do alvo da ação de moderação"
+        },
+        "acao": {
+          "type": "string",
+          "description": "Tipo de ação realizada ('excluir', 'restringir', 'advertir', etc.)"
+        },
+        "descricao": {
+          "type": "string",
+          "description": "Detalhes sobre a ação tomada"
+        },
+        "data": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Data em que a ação foi registrada"
+        }
+      },
+      "required": ["moderador_id", "alvo_tipo", "alvo_id", "acao"]
     }
 
 
+
+
+
+
   }
- }
 }
