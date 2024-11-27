@@ -9,6 +9,7 @@ const usuarioSchema = new mongoose.Schema({
   photoUrl: {type: String, default: null},
   ddd: { type: String, required: true },
   telefone: { type: String, required: true },
+  userSuspenso: { type: Boolean, default: false},
   isModerator: { type: Boolean, default: false },
 }, { timestamps: true }); // O timestamps adiciona automaticamente 'createdAt' e 'updatedAt'
 
