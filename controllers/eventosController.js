@@ -1,6 +1,8 @@
 const Evento = require('../models/Eventos');
 const index = require('../services/algoliaConfig');
 const mapearEventoParaAlgolia = require('../models/AlgoliaMapper');
+const Comentario = require('../models/Comentario');
+const Participacao = require('../models/Participacao');
 
 // Cria um novo evento
 exports.createEvento = async (req, res) => {
@@ -89,6 +91,9 @@ exports.deleteEvento = async (req, res) => {
     if (!evento) {
       return res.status(404).send('Evento não encontrado');
     }
+
+    await Comentario.deleteMany({ evento_id: id });
+    await Participacao.deleteMany({ evento_id: id });
 
     // Deleta o evento do Algolia
     await index.deleteObject(evento._id.toString());

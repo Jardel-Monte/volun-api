@@ -1,6 +1,8 @@
 const Organizacao = require('../models/Organizacao');
 const Evento = require('../models/Eventos');
 const index = require('../services/algoliaConfig');
+const Comentario = require('../models/Comentario');
+const Participacao = require('../models/Participacao');
 const mapearEventoParaAlgolia = require('../models/AlgoliaMapper');
 
 // Atualiza eventos associados a uma organização no Algolia
@@ -108,7 +110,24 @@ exports.deleteOrganizacao = async (req, res) => {
       return res.status(404).send('Organização não encontrada');
     }
 
-    // Deleta a organização do banco de dados
+    // Busca os eventos associados à organização
+    const eventos = await Evento.find({ ong_id: id });
+
+    if (eventos.length > 0) {
+      // Itera sobre cada evento para deletar comentários e participações associados
+      for (const evento of eventos) {
+        // Deleta comentários associados ao evento
+        await Comentario.deleteMany({ evento_id: evento._id });
+
+        // Deleta participações associadas ao evento
+        await Participacao.deleteMany({ evento_id: evento._id });
+      }
+
+      // Deleta os eventos associados à organização
+      await Evento.deleteMany({ ong_id: id });
+    }
+
+    // Deleta a organização
     await Organizacao.findByIdAndDelete(id);
 
     // Atualiza os eventos associados no Algolia
