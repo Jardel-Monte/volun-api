@@ -121,6 +121,9 @@ exports.deleteOrganizacao = async (req, res) => {
 
         // Deleta participações associadas ao evento
         await Participacao.deleteMany({ evento_id: evento._id });
+
+        // Remove o evento do Algolia
+        await index.deleteObject(evento._id.toString());
       }
 
       // Deleta os eventos associados à organização
@@ -129,9 +132,6 @@ exports.deleteOrganizacao = async (req, res) => {
 
     // Deleta a organização
     await Organizacao.findByIdAndDelete(id);
-
-    // Atualiza os eventos associados no Algolia
-    await atualizarEventosAssociados(id);
 
     res.status(200).send('Organização deletada com sucesso!');
   } catch (error) {
