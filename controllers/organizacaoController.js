@@ -100,7 +100,7 @@ exports.updateOrganizacao = async (req, res) => {
   }
 };
 
-// Deleta uma organização
+// Deleta uma organização e seus eventos associados
 exports.deleteOrganizacao = async (req, res) => {
   try {
     const id = req.params.id;
@@ -114,7 +114,7 @@ exports.deleteOrganizacao = async (req, res) => {
     const eventos = await Evento.find({ ong_id: id });
 
     if (eventos.length > 0) {
-      // Itera sobre cada evento para deletar comentários e participações associados
+      // Itera sobre cada evento para deletar do banco e do Algolia
       for (const evento of eventos) {
         // Deleta comentários associados ao evento
         await Comentario.deleteMany({ evento_id: evento._id });
@@ -123,7 +123,12 @@ exports.deleteOrganizacao = async (req, res) => {
         await Participacao.deleteMany({ evento_id: evento._id });
 
         // Remove o evento do Algolia
-        await index.deleteObject(evento._id.toString());
+        try {
+          await index.deleteObject(evento._id.toString());
+          console.log(`Evento ${evento._id} removido do Algolia com sucesso.`);
+        } catch (algoliaError) {
+          console.error(`Erro ao remover evento ${evento._id} do Algolia:`, algoliaError);
+        }
       }
 
       // Deleta os eventos associados à organização
@@ -133,7 +138,7 @@ exports.deleteOrganizacao = async (req, res) => {
     // Deleta a organização
     await Organizacao.findByIdAndDelete(id);
 
-    res.status(200).send('Organização deletada com sucesso!');
+    res.status(200).send('Organização e eventos associados deletados com sucesso!');
   } catch (error) {
     console.error('Erro ao deletar organização:', error);
     res.status(500).send(`Erro ao deletar organização: ${error.message}`);
