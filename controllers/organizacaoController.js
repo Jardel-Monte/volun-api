@@ -135,6 +135,14 @@ exports.deleteOrganizacao = async (req, res) => {
       await Evento.deleteMany({ ong_id: id });
     }
 
+    // Remove a organização do Algolia
+    try {
+      await index.deleteObject(id); // Deleta a organização do Algolia
+      console.log(`Organização ${id} removida do Algolia com sucesso.`);
+    } catch (algoliaError) {
+      console.error(`Erro ao remover organização ${id} do Algolia:`, algoliaError);
+    }
+
     // Deleta a organização
     await Organizacao.findByIdAndDelete(id);
 
@@ -144,6 +152,7 @@ exports.deleteOrganizacao = async (req, res) => {
     res.status(500).send(`Erro ao deletar organização: ${error.message}`);
   }
 };
+
 
 // Retorna endereços associados a um usuario_id específico
 exports.getOrganizacaoByCriadorId = async (req, res) => {
