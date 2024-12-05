@@ -1,110 +1,86 @@
-const { db } = require('../config/firebase-config');
-
-// Função auxiliar para validação dos dados da advertência
-const validateAdvertenciaData = (data) => {
-  if (!data.usuarioId || !data.motivo || !data.data) {
-    return 'Campos obrigatórios não preenchidos: usuarioId, motivo, data.';
-  }
-  if (data.usuarioId && !/^[a-zA-Z0-9]{20}$/.test(data.usuarioId)) {
-    return 'ID do usuário inválido. Deve conter 20 caracteres alfanuméricos.';
-  }
-  return null;
-};
+const Advertencia = require('../models/Advertencia');
 
 // Cria uma nova advertência
 exports.createAdvertencia = async (req, res) => {
   try {
-    const data = req.body;
+    const { moderador_id, usuario_id, motivo, expiracao, detalhes } = req.body;
 
-    // Validação dos dados
-    const validationError = validateAdvertenciaData(data);
-    if (validationError) {
-      return res.status(400).send(validationError);
-    }
+    const novaAdvertencia = new Advertencia({
+      moderador_id,
+      usuario_id,
+      motivo,
+      expiracao,
+      detalhes,
+    });
 
-    await db.collection('advertencias').add(data);
-    res.status(201).send('Advertência criada com sucesso!');
+    await novaAdvertencia.save();
+    res.status(201).json(novaAdvertencia);
   } catch (error) {
-    console.error('Erro ao criar advertência:', error);
-    res.status(500).send(`Erro ao criar advertência: ${error.message}`);
+    res.status(500).json({ message: 'Erro ao criar advertência', error });
   }
 };
 
-// Retorna todas as advertências com paginação
+// Recupera todas as advertências
 exports.getAdvertencias = async (req, res) => {
   try {
-    const pageSize = parseInt(req.query.pageSize) || 10;
-    const page = parseInt(req.query.page) || 1;
-
-    const snapshot = await db.collection('advertencias')
-      .offset((page - 1) * pageSize)
-      .limit(pageSize)
-      .get();
-
-    const advertencias = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const advertencias = await Advertencia.find();
     res.status(200).json(advertencias);
   } catch (error) {
-    console.error('Erro ao buscar advertências:', error);
-    res.status(500).send(`Erro ao buscar advertências: ${error.message}`);
+    res.status(500).json({ message: 'Erro ao buscar advertências', error });
   }
 };
 
-// Retorna uma advertência específica
+// Recupera uma advertência pelo ID
 exports.getAdvertenciaById = async (req, res) => {
   try {
-    const id = req.params.id;
-    const doc = await db.collection('advertencias').doc(id).get();
+    const { id } = req.params;
+    const advertencia = await Advertencia.findById(id);
 
-    if (!doc.exists) {
-      return res.status(404).send('Advertência não encontrada');
+    if (!advertencia) {
+      return res.status(404).json({ message: 'Advertência não encontrada' });
     }
 
-    res.status(200).json({ id: doc.id, ...doc.data() });
+    res.status(200).json(advertencia);
   } catch (error) {
-    console.error('Erro ao buscar advertência:', error);
-    res.status(500).send(`Erro ao buscar advertência: ${error.message}`);
+    res.status(500).json({ message: 'Erro ao buscar advertência', error });
   }
 };
 
-// Atualiza uma advertência
+// Atualiza uma advertência pelo ID
 exports.updateAdvertencia = async (req, res) => {
   try {
-    const id = req.params.id;
-    const data = req.body;
+    const { id } = req.params;
+    const { motivo, expiracao, detalhes } = req.body;
 
-    // Validação dos dados
-    const validationError = validateAdvertenciaData(data);
-    if (validationError) {
-      return res.status(400).send(validationError);
+    const advertenciaAtualizada = await Advertencia.findByIdAndUpdate(
+      id,
+      { motivo, expiracao, detalhes },
+      { new: true } // Retorna o documento atualizado
+    );
+
+    if (!advertenciaAtualizada) {
+      return res.status(404).json({ message: 'Advertência não encontrada' });
     }
 
-    const doc = await db.collection('advertencias').doc(id).get();
-    if (!doc.exists) {
-      return res.status(404).send('Advertência não encontrada');
-    }
-
-    await db.collection('advertencias').doc(id).update(data);
-    res.status(200).send('Advertência atualizada com sucesso!');
+    res.status(200).json(advertenciaAtualizada);
   } catch (error) {
-    console.error('Erro ao atualizar advertência:', error);
-    res.status(500).send(`Erro ao atualizar advertência: ${error.message}`);
+    res.status(500).json({ message: 'Erro ao atualizar advertência', error });
   }
 };
 
-// Deleta uma advertência
+// Exclui uma advertência pelo ID
 exports.deleteAdvertencia = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
 
-    const doc = await db.collection('advertencias').doc(id).get();
-    if (!doc.exists) {
-      return res.status(404).send('Advertência não encontrada');
+    const advertenciaDeletada = await Advertencia.findByIdAndDelete(id);
+
+    if (!advertenciaDeletada) {
+      return res.status(404).json({ message: 'Advertência não encontrada' });
     }
 
-    await db.collection('advertencias').doc(id).delete();
-    res.status(200).send('Advertência deletada com sucesso!');
+    res.status(200).json({ message: 'Advertência excluída com sucesso' });
   } catch (error) {
-    console.error('Erro ao deletar advertência:', error);
-    res.status(500).send(`Erro ao deletar advertência: ${error.message}`);
+    res.status(500).json({ message: 'Erro ao excluir advertência', error });
   }
 };

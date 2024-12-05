@@ -19,7 +19,7 @@ app.use('/swagger-ui', express.static(path.join(__dirname, 'node_modules/swagger
 
 // Importa as rotas
 const usuariosRoutes = require('./routes/usuariosRoutes');
-// const advertenciasRoutes = require('./routes/advertenciasRoutes');
+const advertenciasRoutes = require('./routes/advertenciasRoutes');
 const organizacaoRoutes = require('./routes/organizacaoRoutes');
 const eventosRoutes = require('./routes/eventosRoutes');
 const enderecoRoutes = require('./routes/enderecoRoutes');
@@ -30,7 +30,7 @@ const participacaoRoutes = require('./routes/participacaoRoutes');
 
 // Define as rotas da API
 app.use('/usuarios', usuariosRoutes);
-// app.use('/advertencias', advertenciasRoutes);
+app.use('/advertencias', advertenciasRoutes);
 app.use('/organizacao', organizacaoRoutes);
 app.use('/eventos', eventosRoutes);
 app.use('/endereco', enderecoRoutes);
