@@ -20,15 +20,9 @@ exports.createAcaoModeracao = async (req, res) => {
 };
 
 
-// Obtém todas as ações de moderação com paginação
 exports.getAcoesModeracao = async (req, res) => {
   try {
-    const pageSize = parseInt(req.query.pageSize) || 10;
-    const page = parseInt(req.query.page) || 1;
-
-    const acoes = await AcoesModeracao.find()
-      .skip((page - 1) * pageSize)
-      .limit(pageSize);
+    const acoes = await AcoesModeracao.find(); // Remover as limitações de paginação
 
     res.status(200).json(acoes);
   } catch (error) {
@@ -36,6 +30,7 @@ exports.getAcoesModeracao = async (req, res) => {
     res.status(500).send(`Erro ao buscar ações de moderação: ${error.message}`);
   }
 };
+
 
 
 // Obtém uma ação de moderação específica por ID
