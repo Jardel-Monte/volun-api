@@ -82,3 +82,20 @@ exports.deleteAdvertencia = async (req, res) => {
     res.status(500).json({ message: 'Erro ao excluir advertência', error });
   }
 };
+
+// Recupera advertências pelo usuario_id
+exports.getAdvertenciasByUsuarioId = async (req, res) => {
+  try {
+    const { usuario_id } = req.params;
+    const advertencias = await Advertencia.find({ usuario_id });
+
+    if (advertencias.length === 0) {
+      return res.status(404).json({ message: 'Nenhuma advertência encontrada para este usuário' });
+    }
+
+    res.status(200).json(advertencias);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar advertências por usuario_id', error });
+  }
+};
+
