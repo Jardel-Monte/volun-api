@@ -3,14 +3,12 @@ const Advertencia = require('../models/Advertencia');
 // Cria uma nova advertência
 exports.createAdvertencia = async (req, res) => {
   try {
-    const { moderador_id, usuario_id, motivo, expiracao, detalhes } = req.body;
+    const { moderador_id, usuario_id, motivo } = req.body;
 
     const novaAdvertencia = new Advertencia({
       moderador_id,
       usuario_id,
       motivo,
-      expiracao,
-      detalhes,
     });
 
     await novaAdvertencia.save();
